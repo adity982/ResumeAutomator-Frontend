@@ -1,16 +1,26 @@
-# React + Vite
+# Resume Automator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TypeScript React workspace for evidence-backed resume tailoring, multi-job
+comparison, versioned exports, application tracking, interview practice,
+outreach, personalized discovery, and career analytics.
 
-Currently, two official plugins are available:
+## Local setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Run `npm ci`.
+2. Copy `.env.example` to `.env.local`.
+3. Start the backend with `APP_ENV=development` and `AUTH_MODE=development`.
+4. Run `npm run dev`.
 
-## React Compiler
+When Firebase variables are absent, Vite development uses the explicit local
+development token from `VITE_DEV_AUTH_TOKEN`. Production never enables this
+fallback and requires Firebase configuration.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Quality checks
 
-## Expanding the ESLint configuration
+Run `npm run check` to lint, type-check, test, and build. Heavy chart and
+workflow views are loaded on demand. The API base URL and Firebase public
+configuration are environment-specific; no production endpoint or credential
+is embedded in React components.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+AI-assisted changes remain reviewable drafts. The frontend displays only
+backend-provided score dimensions and never invents ATS metrics.
