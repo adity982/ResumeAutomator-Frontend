@@ -5,6 +5,12 @@ import userEvent from '@testing-library/user-event'
 const apiMock = vi.hoisted(() => ({
   listApplications: vi.fn().mockResolvedValue([]),
   listDocuments: vi.fn().mockResolvedValue([]),
+  listJobs: vi.fn().mockResolvedValue([]),
+  listTasks: vi.fn().mockResolvedValue([]),
+  applicationPackage: vi.fn(),
+  createTask: vi.fn(),
+  updateTask: vi.fn(),
+  deleteTask: vi.fn(),
   createApplication: vi.fn().mockResolvedValue({ id: 1, company: 'Example', role: 'Engineer', stage: 'saved' }),
   updateApplication: vi.fn(),
   deleteApplication: vi.fn(),

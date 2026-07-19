@@ -14,9 +14,11 @@ export function InterviewCoach(): React.JSX.Element {
   const [active, setActive] = useState<InterviewSession | null>(null)
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const queryClient = useQueryClient()
+  const jobs = useQuery({ queryKey: ['jobs'], queryFn: api.listJobs })
   const history = useQuery({ queryKey: ['interviews'], queryFn: api.listInterviews })
+  const selectedJobExists = !selectedJob || jobs.isLoading || (jobs.data || []).some((job) => job.id === selectedJob.id)
   const create = useMutation({
-    mutationFn: () => api.createInterview({ resume_text: resumeText, jd_text: jdText, interview_type: type, job_id: selectedJob?.id }),
+    mutationFn: () => api.createInterview({ resume_text: resumeText, jd_text: jdText, interview_type: type, job_id: selectedJobExists ? selectedJob?.id : undefined }),
     onSuccess: (session) => { setActive(session); setAnswers({}); queryClient.invalidateQueries({ queryKey: ['interviews'] }) },
   })
   const submit = useMutation({
@@ -25,6 +27,8 @@ export function InterviewCoach(): React.JSX.Element {
   })
 
   const ready = resumeText.length >= 30 && jdText.length >= 30
+  const talkingPoints = active ? [...new Set(active.prep_brief.talking_points)] : []
+  const riskAreas = active ? [...new Set(active.prep_brief.risk_areas)] : []
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_20rem]">
       <Panel title="Interactive interview coach" description="Practice, submit answers, and receive rubric-based feedback that stays attached to the session.">
@@ -33,8 +37,14 @@ export function InterviewCoach(): React.JSX.Element {
           <Button disabled={!ready} busy={create.isPending} onClick={() => create.mutate()}>Start session</Button>
         </div>
         {!ready && <StatusMessage message="Add resume and job-description evidence in the Workbench first." />}
+        {!selectedJobExists && <StatusMessage message="The previously selected saved job was removed. This session will use the resume and job-description text still in your Workbench instead." />}
         <StatusMessage message={create.error?.message || submit.error?.message || null} tone="error" />
         {active && (
+          <>
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            <section className="rounded-xl bg-cyan-50 p-4 text-sm text-cyan-950"><h3 className="font-black">Preparation brief · {active.prep_brief.estimated_minutes} minutes</h3><p className="mt-2 font-bold">Talking points</p><ul className="mt-1 list-disc space-y-1 pl-5">{talkingPoints.map((item) => <li key={item}>{item}</li>)}</ul><p className="mt-3 text-xs">{active.prep_brief.evidence_reminder}</p></section>
+            <section className="rounded-xl bg-amber-50 p-4 text-sm text-amber-950"><h3 className="font-black">Prepare for evidence gaps</h3><div className="mt-2 flex flex-wrap gap-2">{riskAreas.map((item) => <span key={item} className="rounded-full bg-white px-2 py-1 text-xs font-bold">{item}</span>)}</div><p className="mt-3 font-bold">Questions to ask</p><ul className="mt-1 list-disc space-y-1 pl-5">{active.prep_brief.questions_to_ask.map((item) => <li key={item}>{item}</li>)}</ul></section>
+          </div>
           <ol className="mt-5 space-y-5">
             {active.questions.map((question, index) => {
               const saved = active.answers.find((item) => item.question_index === index)
@@ -49,6 +59,7 @@ export function InterviewCoach(): React.JSX.Element {
               )
             })}
           </ol>
+          </>
         )}
       </Panel>
       <Panel title="Session history">

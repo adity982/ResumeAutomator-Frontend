@@ -9,13 +9,13 @@ import { Panel } from './Panel'
 import { StatusMessage } from './StatusMessage'
 
 export function JobLibrary(): React.JSX.Element {
-  const { setSelectedJob, setJdText } = useWorkspace()
+  const { selectedJob, setSelectedJob, setJdText } = useWorkspace()
   const [search, setSearch] = useState('')
   const queryClient = useQueryClient()
   const jobs = useQuery({ queryKey: ['jobs'], queryFn: api.listJobs })
   const archive = useMutation({ mutationFn: ({ id, archived }: Pick<Job, 'id' | 'archived'>) => api.updateJob(id, { archived }), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }) })
   const refresh = useMutation({ mutationFn: api.refreshJob, onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }) })
-  const remove = useMutation({ mutationFn: api.deleteJob, onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }) })
+  const remove = useMutation({ mutationFn: api.deleteJob, onSuccess: (_, id) => { if (selectedJob?.id === id) setSelectedJob(null); queryClient.invalidateQueries({ queryKey: ['jobs'] }) } })
   const filtered = (jobs.data || []).filter((job) => `${job.title} ${job.company}`.toLowerCase().includes(search.toLowerCase()))
 
   return (

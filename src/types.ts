@@ -41,6 +41,20 @@ export interface Analysis {
   dimensions: Dimension[]
   gap_plan: GapAction[]
   methodology_version: string
+  input_fingerprint: string
+  methodology: {
+    label: string
+    weights: Record<string, number>
+    repeatable: boolean
+    limitations: string[]
+  }
+}
+
+export interface AnalysisHistory extends Omit<Analysis, 'verdict'> {
+  id: number
+  job_id: number | null
+  document_id: number | null
+  created_at: string
 }
 
 export interface TailorResult {
@@ -94,6 +108,14 @@ export interface InterviewSession {
   interview_type: string
   questions: Array<{ id: number; type: string; question: string }>
   answers: Array<{ question_index: number; answer: string; feedback: InterviewFeedback }>
+  prep_brief: {
+    competencies: string[]
+    talking_points: string[]
+    risk_areas: string[]
+    questions_to_ask: string[]
+    estimated_minutes: number
+    evidence_reminder: string
+  }
   status: string
   created_at: string
   updated_at: string
@@ -132,6 +154,40 @@ export interface SavedSearch {
   results: SearchResult[]
   created_at: string
   updated_at: string
+}
+
+export interface CareerEvidence {
+  id: number
+  category: 'achievement' | 'skill' | 'project' | 'education' | 'certification' | 'story'
+  title: string
+  statement: string
+  source: string
+  verified: boolean
+  tags: string[]
+  created_at: string
+  updated_at: string
+}
+
+export interface FollowUpTask {
+  id: number
+  application_id: number
+  task_type: 'follow_up' | 'interview' | 'deadline' | 'networking' | 'thank_you' | 'custom'
+  title: string
+  due_at: string
+  notes: string
+  completed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface ApplicationPackage {
+  application_id: number
+  readiness_score: number
+  ready_count: number
+  total_count: number
+  checklist: Array<{ key: string; label: string; ready: boolean; detail: string }>
+  resume: DocumentVersion | null
+  cover_letter: DocumentVersion | null
 }
 
 export interface AnalyticsSummary {

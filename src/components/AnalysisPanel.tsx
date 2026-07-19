@@ -3,6 +3,8 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Responsi
 import type { Analysis } from '../types'
 import { Panel } from './Panel'
 
+const radarInitialDimension = { width: 600, height: 320 }
+
 interface AnalysisPanelProps {
   analysis: Analysis
   confirmedFacts: string[]
@@ -13,8 +15,9 @@ export function AnalysisPanel({ analysis, confirmedFacts, onToggleFact }: Analys
   return (
     <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
       <Panel title="Verified ATS dimensions" description={`Methodology ${analysis.methodology_version}. Every value comes from the analysis response.`}>
+        <div className="mb-3 rounded-xl bg-cyan-50 p-3 text-xs text-cyan-950"><p className="font-black">{analysis.methodology.label}</p><p className="mt-1 font-mono">Evidence fingerprint {analysis.input_fingerprint.slice(0, 12)}…</p><p className="mt-1">Repeatable: {analysis.methodology.repeatable ? 'yes' : 'no'} · This score is transparent guidance, not a promise of an employer outcome.</p></div>
         <div className="h-80" aria-label="ATS scoring dimensions chart">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} initialDimension={radarInitialDimension}>
             <RadarChart data={analysis.dimensions} outerRadius="70%">
               <PolarGrid stroke="#cbd5e1" />
               <PolarAngleAxis dataKey="label" tick={{ fill: '#334155', fontSize: 12 }} />
