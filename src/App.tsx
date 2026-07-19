@@ -15,9 +15,11 @@ const InterviewCoach = lazy(() => import('./components/InterviewCoach').then((mo
 const OutreachStudio = lazy(() => import('./components/OutreachStudio').then((module) => ({ default: module.OutreachStudio })))
 const DiscoveryPanel = lazy(() => import('./components/DiscoveryPanel').then((module) => ({ default: module.DiscoveryPanel })))
 const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard').then((module) => ({ default: module.AnalyticsDashboard })))
+const EvidenceVault = lazy(() => import('./components/EvidenceVault').then((module) => ({ default: module.EvidenceVault })))
 
 const tabs = [
   ['workbench', 'Workbench'],
+  ['evidence', 'Evidence vault'],
   ['jobs', 'Job library'],
   ['applications', 'Applications'],
   ['interview', 'Interview'],
@@ -92,6 +94,7 @@ export function App(): React.JSX.Element {
         ) : (
           <Suspense fallback={<Panel title="Loading workspace…"><p role="status">Preparing this workspace…</p></Panel>}>
             {tab === 'workbench' && <Workbench />}
+            {tab === 'evidence' && <EvidenceVault />}
             {tab === 'jobs' && <JobLibrary />}
             {tab === 'applications' && <ApplicationBoard />}
             {tab === 'interview' && <InterviewCoach />}

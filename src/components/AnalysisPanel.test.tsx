@@ -7,6 +7,8 @@ const analysis: Analysis = {
   score: 62.5,
   verdict: 'Moderate match.',
   methodology_version: 'heuristic-v1',
+  input_fingerprint: 'a'.repeat(64),
+  methodology: { label: 'Evidence-weighted deterministic match', weights: { skills: 1 }, repeatable: true, limitations: ['Not a guarantee.'] },
   dimensions: [
     { key: 'skills', label: 'Skills alignment', score: 60, definition: 'Measured skill overlap.', evidence: ['python'], confidence: 0.8 },
     { key: 'keywords', label: 'Keyword coverage', score: 65, definition: 'Measured keyword overlap.', evidence: ['api'], confidence: 0.7 },

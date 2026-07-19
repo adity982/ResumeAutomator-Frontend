@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api, downloadBlob } from '../api/client'
 import { useWorkspace } from '../hooks/useWorkspace'
@@ -21,6 +21,8 @@ export function Workbench(): React.JSX.Element {
   const [confirmedFacts, setConfirmedFacts] = useState<string[]>([])
   const [coverLetter, setCoverLetter] = useState('')
   const queryClient = useQueryClient()
+  const evidence = useQuery({ queryKey: ['evidence'], queryFn: api.listEvidence })
+  const verifiedTags = [...new Set((evidence.data || []).filter((item) => item.verified).flatMap((item) => item.tags))]
 
   const upload = useMutation({
     mutationFn: api.parseResume,
@@ -122,6 +124,12 @@ export function Workbench(): React.JSX.Element {
       </div>
 
       <StatusMessage message={errors?.message || null} tone="error" />
+
+      {verifiedTags.length > 0 && (
+        <Panel title="Verified evidence tags" description="Select only tags supported by your evidence vault. Matching gaps may be included in the fact-locked draft.">
+          <div className="flex flex-wrap gap-2">{verifiedTags.map((tag) => <button key={tag} className={`rounded-full border px-3 py-2 text-sm font-bold ${confirmedFacts.includes(tag) ? 'border-cyan-700 bg-cyan-700 text-white' : 'border-slate-300 bg-white text-slate-700'}`} aria-pressed={confirmedFacts.includes(tag)} onClick={() => setConfirmedFacts((current) => current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag])}>{tag}</button>)}</div>
+        </Panel>
+      )}
 
       {analysis && (
         <Suspense fallback={<Panel title="Loading analysis view…" />}>

@@ -24,3 +24,6 @@ is embedded in React components.
 
 AI-assisted changes remain reviewable drafts. The frontend displays only
 backend-provided score dimensions and never invents ATS metrics.
+
+The research signals, selected top-five features, implementation mapping, and
+release gates are documented in [`MARKET_FEATURE_PLAN.md`](MARKET_FEATURE_PLAN.md).

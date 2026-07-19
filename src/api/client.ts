@@ -1,9 +1,13 @@
 import type {
   Analysis,
+  AnalysisHistory,
   AnalyticsSummary,
   Application,
+  ApplicationPackage,
   ApplicationStage,
+  CareerEvidence,
   DocumentVersion,
+  FollowUpTask,
   InterviewSession,
   Job,
   OutreachKit,
@@ -110,6 +114,9 @@ export const api = {
   analyze(payload: { resume_text: string; jd_text: string; job_id?: number; document_id?: number }): Promise<Analysis> {
     return request('/analysis', { method: 'POST', body: json(payload) })
   },
+  analysisHistory(): Promise<AnalysisHistory[]> {
+    return request('/analysis/history')
+  },
   compare(resumeText: string, targets: Array<{ label: string; jd_text: string }>): Promise<Array<{ label: string; analysis: Analysis }>> {
     return request('/analysis/batch', { method: 'POST', body: json({ resume_text: resumeText, targets }) })
   },
@@ -140,6 +147,21 @@ export const api = {
   deleteApplication(id: number): Promise<void> {
     return request(`/applications/${id}`, { method: 'DELETE' })
   },
+  applicationPackage(id: number): Promise<ApplicationPackage> {
+    return request(`/applications/${id}/package`)
+  },
+  listTasks(): Promise<FollowUpTask[]> {
+    return request('/tasks')
+  },
+  createTask(payload: { application_id: number; task_type: FollowUpTask['task_type']; title: string; due_at: string; notes?: string }): Promise<FollowUpTask> {
+    return request('/tasks', { method: 'POST', body: json(payload) })
+  },
+  updateTask(id: number, payload: { completed?: boolean; title?: string; due_at?: string; notes?: string; task_type?: FollowUpTask['task_type'] }): Promise<FollowUpTask> {
+    return request(`/tasks/${id}`, { method: 'PATCH', body: json(payload) })
+  },
+  deleteTask(id: number): Promise<void> {
+    return request(`/tasks/${id}`, { method: 'DELETE' })
+  },
   listInterviews(): Promise<InterviewSession[]> {
     return request('/interviews')
   },
@@ -160,6 +182,18 @@ export const api = {
   },
   createSearch(payload: { name: string; resume_text: string; preferences: Record<string, unknown> }): Promise<SavedSearch> {
     return request('/searches', { method: 'POST', body: json(payload) })
+  },
+  listEvidence(): Promise<CareerEvidence[]> {
+    return request('/evidence')
+  },
+  createEvidence(payload: { category: CareerEvidence['category']; title: string; statement: string; source?: string; verified?: boolean; tags?: string[] }): Promise<CareerEvidence> {
+    return request('/evidence', { method: 'POST', body: json(payload) })
+  },
+  updateEvidence(id: number, payload: Partial<Pick<CareerEvidence, 'category' | 'title' | 'statement' | 'source' | 'verified' | 'tags'>>): Promise<CareerEvidence> {
+    return request(`/evidence/${id}`, { method: 'PATCH', body: json(payload) })
+  },
+  deleteEvidence(id: number): Promise<void> {
+    return request(`/evidence/${id}`, { method: 'DELETE' })
   },
   analytics(filters: { date_from?: string; date_to?: string; company?: string; role?: string } = {}): Promise<AnalyticsSummary> {
     const params = new URLSearchParams(Object.entries(filters).filter(([, value]) => Boolean(value)) as Array<[string, string]>)
