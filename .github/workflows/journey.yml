@@ -8,7 +8,10 @@ permissions:
   contents: read
 jobs:
   journey:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PLAYWRIGHT_CHANNEL: chrome
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,8 +41,8 @@ jobs:
       - run: pip install -r backend/requirements.txt
       - run: npm ci
         working-directory: frontend
-      - run: npx playwright install --with-deps chromium
-        working-directory: frontend
+      - name: Verify the runner's installed Chrome
+        run: google-chrome --version
       - run: npm run test:e2e
         working-directory: frontend
       - uses: actions/upload-artifact@v4
