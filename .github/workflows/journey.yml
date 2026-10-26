@@ -1,0 +1,50 @@
+name: Application journey
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  journey:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: frontend
+      - uses: actions/checkout@v4
+        with:
+          repository: adity982/ResumeAutomator-Backend
+          path: backend
+      - name: Use matching backend feature branch when available
+        working-directory: backend
+        env:
+          BACKEND_REF: ${{ github.head_ref || 'main' }}
+        run: |
+          if git fetch origin "$BACKEND_REF"; then
+            git checkout --detach FETCH_HEAD
+          else
+            git checkout main
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: pip install -r backend/requirements.txt
+      - run: npm ci
+        working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - run: npm run test:e2e
+        working-directory: frontend
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: journey-diagnostics
+          path: frontend/test-results
+          retention-days: 7

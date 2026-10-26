@@ -21,7 +21,7 @@ export interface Dimension {
   score: number
   definition: string
   evidence: string[]
-  confidence: number
+  confidence: number | null
 }
 
 export interface GapAction {
@@ -31,7 +31,7 @@ export interface GapAction {
   jd_evidence: string
   resume_evidence: string | null
   suggestion: string
-  confidence: number
+  confidence: number | null
 }
 
 export interface Analysis {
@@ -62,6 +62,7 @@ export interface TailorResult {
   tailored: string
   added_phrases: string[]
   warnings: string[]
+  citations?: Array<{ evidence_id: number; source_id: number; url: string; statement: string }>
 }
 
 export interface DocumentVersion {
@@ -75,6 +76,8 @@ export interface DocumentVersion {
   template: string
   version: number
   approved: boolean
+  content_hash: string
+  evidence_snapshot: Array<{ evidence_id: number; hash: string }>
   created_at: string
 }
 
@@ -91,6 +94,7 @@ export interface Application {
   cover_letter_document_id: number | null
   created_at: string
   updated_at: string
+  outcome: '' | 'rejected' | 'withdrawn' | 'expired' | 'accepted'
 }
 
 export interface InterviewFeedback {
@@ -99,6 +103,9 @@ export interface InterviewFeedback {
   feedback: string
   matched_terms: string[]
   stronger_answer_outline: string
+  evidence?: string[]
+  limitations?: string
+  follow_up?: string
 }
 
 export interface InterviewSession {
@@ -138,11 +145,15 @@ export interface OutreachKit {
     evidence: string[]
   }
   created_at: string
+  contact_id: number | null
+  status: 'draft' | 'sent' | 'replied' | 'closed'
+  revision: number
+  updated_at: string
 }
 
 export interface SearchResult {
   title: string
-  fit_score: number
+  fit_score: number | null
   reason: string
   links: Record<string, string>
 }
@@ -204,4 +215,98 @@ export interface AuthSession {
   email: string
   displayName: string
   isDevelopment: boolean
+}
+
+export interface PortfolioSource {
+  id: number
+  repository: string
+  commit_sha: string
+  source_url: string
+  description: string
+  is_fork: boolean
+  status: string
+  relationship: string
+  contribution: string
+  files: Array<{ path: string; bytes: number; excerpt: string }>
+}
+
+export interface ProjectEvidence {
+  id: number
+  source_id: number
+  path: string
+  start_line: number
+  end_line: number
+  content: string
+  source_url: string
+  kind: string
+  review_status: 'observed' | 'approved' | 'rejected'
+  approved_statement: string
+}
+
+export interface Citation {
+  evidence_id: number
+  source_id: number
+  repository: string
+  url: string
+  excerpt: string
+  statement: string
+  review_status: string
+  path: string
+  start_line: number
+  end_line: number
+}
+
+export interface ProjectRecommendation {
+  run_id: number
+  job_id: number
+  requirements: Array<{
+    id: string
+    text: string
+    priority: string
+    status: 'supported' | 'partial' | 'missing'
+    citations: Citation[]
+  }>
+  projects: Array<{
+    source_id: number
+    repository: string
+    reason: string
+    requirement_ids: string[]
+  }>
+  excluded_projects: Array<{ source_id: number; repository: string; reason: string }>
+  bullets: Array<{ text: string; requirement_id: string; citation: Citation }>
+  warnings: string[]
+  method: string
+  embedding_version: string
+  input_fingerprint: string
+  latency_ms: number
+}
+
+export interface WorkspaceData {
+  resume_text: string
+  jd_text: string
+  selected_job_id: number | null
+  tailored_text: string
+  cover_letter: string
+  evidence_ids: number[]
+  resume_logical_id: string | null
+  cover_logical_id: string | null
+  target_title: string
+  target_company: string
+  target_url: string
+}
+
+export interface Contact {
+  id: number
+  job_id: number | null
+  name: string
+  role: string
+  company: string
+  linkedin_url: string
+  relationship: string
+  hiring_signal: string
+  signal_url: string
+  signal_observed_at: string | null
+  status: 'saved' | 'contacted' | 'replied' | 'closed'
+  follow_up_at: string | null
+  stop_follow_up: boolean
 }
