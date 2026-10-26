@@ -10,7 +10,7 @@ test('job to cited project draft to approved document and saved recovery', async
   await page.getByLabel('Role', { exact: true }).fill(`API developer ${Date.now()}`)
   await page.getByLabel('Company', { exact: true }).fill('Synthetic test company')
   await page
-    .getByLabel('Job description', { exact: true })
+    .getByRole('textbox', { name: 'Job description', exact: true })
     .fill('Build Python FastAPI APIs with PostgreSQL persistence and request validation tests.')
   await page.getByRole('button', { name: 'Save target' }).click()
   await expect(page).toHaveURL(/#\/jobs\/\d+\/prepare/)
