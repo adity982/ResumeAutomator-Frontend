@@ -7,7 +7,12 @@ const subscribe = (callback: () => void): (() => void) => {
 export function useRoute(): string {
   return useSyncExternalStore(
     subscribe,
-    () => window.location.hash.slice(1) || '/jobs',
+    () =>
+      new URLSearchParams(window.location.search).has('state') &&
+      (new URLSearchParams(window.location.search).has('code') ||
+        new URLSearchParams(window.location.search).has('error'))
+        ? '/evidence'
+        : window.location.hash.slice(1) || '/jobs',
     () => '/jobs',
   )
 }

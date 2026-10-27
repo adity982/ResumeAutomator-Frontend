@@ -5,6 +5,7 @@ import type { PortfolioSource, ProjectEvidence } from '../types'
 import { Button } from './Button'
 import { Panel } from './Panel'
 import { StatusMessage } from './StatusMessage'
+import { GitHubConnection } from './GitHubConnection'
 
 function EvidenceReview({
   evidence,
@@ -102,7 +103,7 @@ function SourceDetail({ source }: { source: PortfolioSource }): React.JSX.Elemen
   return (
     <Panel
       title={source.repository}
-      description={`Snapshot ${source.commit_sha.slice(0, 10)} · ${source.is_fork ? 'Fork' : 'Public repository'} · ${source.status}`}
+      description={`Snapshot ${source.commit_sha.slice(0, 10)} · ${source.is_private ? 'Private repository' : source.is_fork ? 'Fork' : 'Public repository'} · ${source.status}`}
     >
       {source.status !== 'ready' ? (
         <>
@@ -224,6 +225,7 @@ function SourceDetail({ source }: { source: PortfolioSource }): React.JSX.Elemen
 
 export function PortfolioPanel(): React.JSX.Element {
   const [url, setUrl] = useState('')
+  const [useConnection, setUseConnection] = useState(false)
   const [selected, setSelected] = useState<number | null>(null)
   const client = useQueryClient()
   const sources = useQuery({
@@ -241,7 +243,7 @@ export function PortfolioPanel(): React.JSX.Element {
       query.state.data?.some((item) => ['queued', 'running'].includes(item.status)) ? 3000 : false,
   })
   const preview = useMutation({
-    mutationFn: () => api.previewSource(url),
+    mutationFn: () => api.previewSource(url, useConnection),
     onSuccess: (source) => {
       setSelected(source.id)
       client.invalidateQueries({ queryKey: ['sources'] })
@@ -265,12 +267,13 @@ export function PortfolioPanel(): React.JSX.Element {
   const active = sources.data?.find((source) => source.id === selected)
   return (
     <div className="space-y-5">
+      <GitHubConnection />
       <Panel
         title="Bring your work into the conversation"
-        description="Import selected public GitHub projects, inspect the evidence, and confirm your contribution before using it in a resume."
+        description="Import selected GitHub projects, inspect the evidence, and confirm your contribution before using it in a resume."
       >
         <label className="block text-sm font-bold text-slate-700">
-          Public GitHub repository URL
+          GitHub repository URL
           <input
             className="mt-2 w-full rounded-xl border border-slate-300 p-3"
             type="url"
@@ -278,6 +281,14 @@ export function PortfolioPanel(): React.JSX.Element {
             onChange={(event) => setUrl(event.target.value)}
             placeholder="https://github.com/your-name/your-project"
           />
+        </label>
+        <label className="mt-3 flex items-center gap-2 text-sm text-slate-700">
+          <input
+            type="checkbox"
+            checked={useConnection}
+            onChange={(event) => setUseConnection(event.target.checked)}
+          />
+          Use my connected GitHub account, including selected private repositories
         </label>
         <Button
           className="mt-3"

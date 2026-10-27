@@ -127,9 +127,7 @@ export const api = {
       created_at: string
     }>
   > => request(`/applications/${id}/events`),
-  async parseResume(
-    file: File,
-  ): Promise<{
+  async parseResume(file: File): Promise<{
     extracted_data: {
       raw_content: string
       name: string
@@ -370,8 +368,24 @@ export const api = {
     return request('/account', { method: 'DELETE' })
   },
   sources: (): Promise<PortfolioSource[]> => request('/sources'),
-  previewSource: (url: string): Promise<PortfolioSource> =>
-    request('/sources/preview', { method: 'POST', body: json({ url }) }, 90_000),
+  previewSource: (url: string, useConnection = false): Promise<PortfolioSource> =>
+    request(
+      '/sources/preview',
+      { method: 'POST', body: json({ url, use_connected_github: useConnection }) },
+      90_000,
+    ),
+  githubConnection: (): Promise<{
+    configured: boolean
+    installation_url: string | null
+    connected: boolean
+    login: string | null
+    expires_at: string | null
+  }> => request('/connections/github'),
+  startGitHubConnection: (): Promise<{ authorization_url: string }> =>
+    request('/connections/github/start', { method: 'POST' }),
+  completeGitHubConnection: (code: string, state: string): Promise<{ connected: boolean }> =>
+    request('/connections/github/complete', { method: 'POST', body: json({ code, state }) }),
+  disconnectGitHub: (): Promise<void> => request('/connections/github', { method: 'DELETE' }),
   importSource: (
     id: number,
     paths: string[],

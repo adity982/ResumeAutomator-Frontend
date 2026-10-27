@@ -27,4 +27,4 @@ Publish a benchmark table with dataset size, split, model/version, evaluation co
 
 ## Public launch gate
 
-Confirm staging and production backend/frontend revisions, PostgreSQL migrations and restore testing, Firebase configuration, worker availability, model warm-up, account deletion/export, mobile usability, privacy/backup retention and provider budgets. Publish known limitations. Private GitHub access, general LinkedIn people search and automated messaging are not capabilities of this release.
+Confirm staging and production backend/frontend revisions, PostgreSQL migrations and restore testing, Firebase configuration, worker availability, model warm-up, account deletion/export, mobile usability, privacy/backup retention and provider budgets. Publish known limitations. Private GitHub access requires operator App registration and a live consent test. General LinkedIn people search and automated messaging are not enabled. See PILOT-STUDY.md for consent and observation procedures and LAUNCH-KIT.md for reusable demo and announcement materials.

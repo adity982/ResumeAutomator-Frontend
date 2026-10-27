@@ -224,6 +224,7 @@ export interface PortfolioSource {
   source_url: string
   description: string
   is_fork: boolean
+  is_private: boolean
   status: string
   relationship: string
   contribution: string

@@ -38,10 +38,11 @@ export function SettingsPanel({
             storage.
           </p>
           <p>
-            Repository imports use the public GitHub API. Local FastEmbed embeddings run on the
-            server when configured. Optional cover-letter polishing sends its supplied draft to Groq
-            when the operator enables that provider. No private repository access is included in
-            this release.
+            Repository imports use GitHub’s API. Optional GitHub App connections can read selected
+            private repositories when enabled by the operator. Imported excerpts remain until you
+            remove the source or account; disconnecting removes the credential. Local FastEmbed
+            embeddings run on the server when configured. Optional cover-letter polishing sends its
+            supplied draft to Groq when the operator enables that provider.
           </p>
           <p>
             Deleting Resume Automator data removes the application's records and derived evidence.

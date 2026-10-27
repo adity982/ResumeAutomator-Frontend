@@ -26,7 +26,7 @@ Preview generates the actual PDF used for export. Approval is invalidated when d
 - Resume coverage and interview checklists are not calibrated ATS or hiring predictions.
 - Search suggestions link to providers; they do not claim to be verified vacancies.
 - LinkedIn contacts and hiring signals are recorded manually. Messages are editable drafts for the user to copy and send. The app does not scrape profiles or send connection requests/messages.
-- Public repository URLs are supported. Private GitHub OAuth/App installation access is not included.
+- Public imports work without a connection. Optional GitHub App authorization supports selected private repositories when the operator configures it; live consent must be tested before launch.
 - Learned embeddings require the backend FastEmbed configuration; lexical mode is disclosed when active.
 
 ## Development
@@ -52,3 +52,6 @@ PDF bytes are parsed without persistent upload storage; saved document text and 
 ## Pilot
 
 Use [the observation and launch guide](docs/PILOT.md) with five to ten consenting developers. The software supports recording feedback; this repository does not claim a pilot has already happened, nor does it fabricate user counts, time savings or hiring results.
+
+
+Launch artifacts: [demo, post and case study](docs/LAUNCH-KIT.md), [pilot protocol](docs/PILOT-STUDY.md), and [LinkedIn access dossier](docs/LINKEDIN-INTEGRATION.md).
