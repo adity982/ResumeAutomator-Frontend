@@ -32,10 +32,10 @@ test('job to cited project draft to approved document and saved recovery', async
   await expect(page.getByLabel('Tailored — editable')).toHaveValue(/FastAPI/)
   await expect(page.getByLabel('I reviewed this exact version')).not.toBeChecked()
   await page.getByRole('link', { name: 'Track application', exact: true }).click()
-  await page.getByLabel('Approved resume', { exact: true }).selectOption({ index: 1 })
+  await page.getByRole('combobox', { name: 'Approved resume', exact: true }).selectOption({ index: 1 })
   await page.getByRole('button', { name: 'Add this job to my application tracker' }).click()
-  await expect(page.getByLabel('Stage', { exact: true })).toBeVisible()
-  await page.getByLabel('Stage', { exact: true }).selectOption('applied')
+  await expect(page.getByRole('combobox', { name: 'Stage', exact: true })).toBeVisible()
+  await page.getByRole('combobox', { name: 'Stage', exact: true }).selectOption('applied')
   await expect(page.getByText('stage changed · applied')).toBeVisible()
 })
 
