@@ -81,6 +81,33 @@ export interface DocumentVersion {
   created_at: string
 }
 
+export interface ResumeBase {
+  job_id: number
+  source_document_id: number
+  source_title: string
+  source_version: number
+  content: string
+  evidence_ids: number[]
+  approved: false
+  logical_id: null
+  warnings: string[]
+}
+
+export interface WorkQueue {
+  items: Array<{
+    key: string
+    kind: string
+    title: string
+    detail: string
+    href: string
+    due_at: string | null
+    overdue: boolean
+  }>
+  has_more: boolean
+  generated_at: string
+  scope: string
+}
+
 export interface Application {
   id: number
   job_id: number | null

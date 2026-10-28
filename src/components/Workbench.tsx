@@ -8,6 +8,7 @@ import { Button } from './Button'
 import { Panel } from './Panel'
 import { ResumeEditor } from './ResumeEditor'
 import { StatusMessage } from './StatusMessage'
+import { ResumeReuse } from './ResumeReuse'
 
 const AnalysisPanel = lazy(() =>
   import('./AnalysisPanel').then((module) => ({ default: module.AnalysisPanel })),
@@ -136,6 +137,7 @@ export function Workbench(): React.JSX.Element {
 
   return (
     <div className="space-y-6">
+      <ResumeReuse />
       <div className="grid gap-5 xl:grid-cols-2">
         <Panel
           title="1. Resume evidence"

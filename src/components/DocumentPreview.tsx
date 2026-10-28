@@ -6,6 +6,7 @@ import { useWorkspace } from '../hooks/useWorkspace'
 import { Button } from './Button'
 import { Panel } from './Panel'
 import { StatusMessage } from './StatusMessage'
+import { ResumeChangeReview } from './ResumeChangeReview'
 
 const templates = ['standard', 'modern', 'executive', 'minimalist', 'creative'] as const
 
@@ -94,6 +95,9 @@ export function DocumentPreview({
       }
       description="Preview the actual generated PDF. Approval applies only to this content, template, job and evidence selection."
     >
+      {kind === 'resume' && (
+        <ResumeChangeReview original={tailored?.original || ''} draft={content} />
+      )}
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <label className="text-sm font-bold text-slate-700">
           Template

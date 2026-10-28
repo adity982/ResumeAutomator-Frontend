@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('job to cited project draft to approved document and saved recovery', async ({ page }) => {
+test('job to cited project draft to approved document and saved recovery', async ({ page }, testInfo) => {
   await page.goto('/#/jobs/new')
   await page
     .getByLabel('Parsed resume — editable')
@@ -32,11 +32,44 @@ test('job to cited project draft to approved document and saved recovery', async
   await expect(page.getByLabel('Tailored — editable')).toHaveValue(/FastAPI/)
   await expect(page.getByLabel('I reviewed this exact version')).not.toBeChecked()
   await page.getByRole('link', { name: 'Track application', exact: true }).click()
-  await page.getByRole('combobox', { name: 'Approved resume', exact: true }).selectOption({ index: 1 })
+  await page
+    .getByRole('combobox', { name: 'Approved resume', exact: true })
+    .selectOption({ index: 1 })
   await page.getByRole('button', { name: 'Add this job to my application tracker' }).click()
   await expect(page.getByRole('combobox', { name: 'Stage', exact: true })).toBeVisible()
   await page.getByRole('combobox', { name: 'Stage', exact: true }).selectOption('applied')
   await expect(page.getByText('stage changed · applied')).toBeVisible()
+  await page
+    .getByLabel('Reminder time (your local time)')
+    .fill(new Date(Date.now() + 3_600_000).toISOString().slice(0, 16))
+  await page.getByRole('button', { name: 'Save reminder', exact: true }).click()
+  await expect(page.getByText(/Reminder saved\. It will appear/)).toBeVisible()
+  await page.getByRole('link', { name: 'Jobs', exact: true }).click()
+  await expect(page.getByRole('link', { name: /Review follow-up for API developer/ })).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('next-steps.png'), fullPage: true })
+  await page.setViewportSize({ width: 390, height: 844 })
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false)
+  await page.screenshot({ path: testInfo.outputPath('next-steps-mobile.png'), fullPage: true })
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.getByRole('link', { name: 'Prepare a new application', exact: true }).click()
+  await page.getByLabel('Role', { exact: true }).fill(`Second API role ${Date.now()}`)
+  await page.getByLabel('Company', { exact: true }).fill('Second synthetic company')
+  await page
+    .getByRole('textbox', { name: 'Job description', exact: true })
+    .fill('Build reliable Python FastAPI APIs with PostgreSQL and request tests.')
+  await page.getByRole('button', { name: 'Save target' }).click()
+  await expect(page).toHaveURL(/#\/jobs\/\d+\/prepare/)
+  await page.getByRole('combobox', { name: 'Saved resume to reuse' }).selectOption({ index: 1 })
+  page.once('dialog', (dialog) => dialog.accept())
+  await page.getByRole('button', { name: 'Use as starting draft' }).click()
+  await expect(page.getByLabel('Tailored — editable')).toHaveValue(/FastAPI/)
+  await expect(page.getByLabel('I reviewed this exact version')).not.toBeChecked()
+  await expect(page.getByText('No text changes from this starting version.')).toBeAttached()
+  await page.getByRole('button', { name: 'Preview PDF', exact: true }).click()
+  await page.getByLabel('I reviewed this exact version').check()
+  await page.getByRole('button', { name: 'Save version', exact: true }).click()
+  await expect(page.getByText(/Saved approved version 1/)).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('reused-resume.png'), fullPage: true })
 })
 
 test('illustrative sample is usable on a narrow screen', async ({ page }) => {

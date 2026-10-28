@@ -20,7 +20,10 @@ export function JobLibrary(): React.JSX.Element {
   })
   const archive = useMutation({
     mutationFn: ({ id, archived }: Pick<Job, 'id' | 'archived'>) => api.updateJob(id, { archived }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['jobs'] })
+      queryClient.invalidateQueries({ queryKey: ['work-queue'] })
+    },
   })
   const refresh = useMutation({
     mutationFn: api.refreshJob,
@@ -31,6 +34,7 @@ export function JobLibrary(): React.JSX.Element {
     onSuccess: (_, id) => {
       if (selectedJob?.id === id) setSelectedJob(null)
       queryClient.invalidateQueries({ queryKey: ['jobs'] })
+      queryClient.invalidateQueries({ queryKey: ['work-queue'] })
     },
   })
   const filtered = (jobs.data || []).filter((job) =>

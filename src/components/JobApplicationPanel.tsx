@@ -5,6 +5,7 @@ import type { ApplicationStage, Job } from '../types'
 import { Button } from './Button'
 import { Panel } from './Panel'
 import { StatusMessage } from './StatusMessage'
+import { ApplicationFollowUps } from './ApplicationFollowUps'
 
 export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
   const client = useQueryClient()
@@ -24,6 +25,7 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
     client.invalidateQueries({ queryKey: ['application-events'] })
     client.invalidateQueries({ queryKey: ['analytics'] })
     client.invalidateQueries({ queryKey: ['application-package'] })
+    client.invalidateQueries({ queryKey: ['work-queue'] })
   }
   const create = useMutation({
     mutationFn: () =>
@@ -149,6 +151,13 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
         <p className="mt-3 text-sm text-slate-600">
           Next step: preview and approve a resume in Prepare application.
         </p>
+      )}
+      {application && application.stage !== 'closed' && (
+        <ApplicationFollowUps
+          key={application.id}
+          applicationId={application.id}
+          role={job.title}
+        />
       )}
       {events.data && (
         <ol className="mt-6 space-y-3">

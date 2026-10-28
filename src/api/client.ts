@@ -18,6 +18,8 @@ import type {
   ProjectRecommendation,
   WorkspaceData,
   Contact,
+  WorkQueue,
+  ResumeBase,
 } from '../types'
 
 const API_BASE =
@@ -264,6 +266,12 @@ export const api = {
   },
   listTasks(): Promise<FollowUpTask[]> {
     return request('/tasks')
+  },
+  workQueue(): Promise<WorkQueue> {
+    return request('/work-queue')
+  },
+  reuseResume(jobId: number, documentId: number): Promise<ResumeBase> {
+    return request(`/jobs/${jobId}/resume-base/${documentId}`, { method: 'POST' })
   },
   createTask(payload: {
     application_id: number

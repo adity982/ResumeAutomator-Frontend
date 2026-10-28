@@ -14,6 +14,7 @@ import { JobWorkspace } from './components/JobWorkspace'
 import { SampleWorkspace } from './components/SampleWorkspace'
 import { SettingsPanel } from './components/SettingsPanel'
 import { PilotFeedback } from './components/PilotFeedback'
+import { NextActions } from './components/NextActions'
 import { WorkspaceProvider } from './context/WorkspaceProvider'
 import { useWorkspace } from './hooks/useWorkspace'
 import { useAuth } from './hooks/useAuth'
@@ -193,6 +194,7 @@ function WorkspaceShell({
                   Explore a sample first
                 </a>
               </Panel>
+              <NextActions />
               <JobLibrary />
             </>
           )}
