@@ -26,7 +26,7 @@ export function NextActions(): React.JSX.Element {
       )}
       <ol className="divide-y divide-slate-200">
         {queue.data?.items.map((item) => (
-          <li key={item.key} className="flex flex-wrap items-start justify-between gap-3 py-4">
+          <li key={item.key} className="flex flex-col items-start gap-3 py-4 sm:flex-row sm:justify-between">
             <div className="min-w-0 flex-1">
               <a href={item.href} className="break-words font-bold text-cyan-800 underline">
                 {item.title}
