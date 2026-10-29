@@ -373,7 +373,8 @@ export function ApplicationBoard(): React.JSX.Element {
           onChange={(event) => setSearch(event.target.value)}
         />
       </label>
-      <div className="grid gap-4 xl:grid-cols-5">
+      <p className="text-xs text-ink-500 xl:hidden">Scroll across to see every stage.</p>
+      <div className="pipeline-grid" role="region" aria-label="Application pipeline" tabIndex={0}>
         {stages.map((stage) => (
           <section
             key={stage}

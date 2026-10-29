@@ -138,6 +138,7 @@ test('signed-out welcome keeps the sample accessible on desktop and mobile', asy
   await expect(page).toHaveURL('http://127.0.0.1:5175/')
   await expect(page.getByRole('main')).toBeFocused()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your work,well represented.')
+  await page.getByRole('heading', { level: 1 }).click()
   await page.evaluate(() => document.fonts.ready)
   await page.screenshot({ path: testInfo.outputPath('welcome.png'), fullPage: true })
   await page.setViewportSize({ width: 390, height: 844 })

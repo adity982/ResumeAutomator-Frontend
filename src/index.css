@@ -658,6 +658,24 @@ details[open] > summary {
 .metric-grid .panel:first-child {
   border-left: 0;
 }
+.pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 1279px) {
+  .pipeline-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(230px, 70vw);
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scroll-snap-type: x proximity;
+  }
+  .pipeline-grid > section {
+    scroll-snap-align: start;
+  }
+}
 @media (max-width: 900px) {
   .home-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -766,7 +784,7 @@ details[open] > summary {
     padding: 62px 0 42px;
   }
   .landing-hero h1 {
-    font-size: 65px;
+    font-size: clamp(44px, 14vw, 56px);
   }
   .landing-hero .hero-copy {
     font-size: 15px;
