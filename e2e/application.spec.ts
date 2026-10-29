@@ -1,0 +1,153 @@
+import { test, expect } from '@playwright/test'
+
+test('job to cited project draft to approved document and saved recovery', async ({
+  page,
+}, testInfo) => {
+  await page.goto('/#/jobs/new')
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/#\/jobs\/new$/)
+  await expect(page.getByRole('main')).toBeFocused()
+  await page
+    .getByLabel('Parsed resume — editable')
+    .fill(
+      'Sam Example\nSUMMARY\nI build reliable Python web applications.\nPROJECTS\nImplemented API services and database tests.',
+    )
+  await page.getByLabel('Role', { exact: true }).fill(`API developer ${Date.now()}`)
+  await page.getByLabel('Company', { exact: true }).fill('Synthetic test company')
+  await page
+    .getByRole('textbox', { name: 'Job description', exact: true })
+    .fill('Build Python FastAPI APIs with PostgreSQL persistence and request validation tests.')
+  await page.getByRole('button', { name: 'Save target' }).click()
+  await expect(page).toHaveURL(/#\/jobs\/\d+\/prepare/)
+  await page.getByRole('link', { name: 'Choose projects', exact: true }).click()
+  await page.getByRole('button', { name: 'Find supporting experience' }).click()
+  await expect(page.getByRole('heading', { name: 'Recommended project set' })).toBeVisible()
+  await page.getByRole('button', { name: 'Add selected bullets to a reviewable draft' }).click()
+  await expect(page.getByLabel('Tailored — editable')).toHaveValue(/FastAPI/)
+  await page.getByRole('button', { name: 'Preview PDF', exact: true }).click()
+  const approval = page.getByLabel('I reviewed this exact version')
+  await expect(approval).toBeEnabled()
+  await approval.check()
+  await page.getByRole('button', { name: 'Save version', exact: true }).click()
+  await expect(page.getByText(/Saved approved version 1/)).toBeVisible()
+  await page.getByRole('button', { name: 'Save progress', exact: true }).click()
+  await expect(page.getByText('Progress saved to your account')).toBeVisible()
+  await page.reload()
+  await page.getByRole('button', { name: 'Restore saved workspace' }).click()
+  await expect(page.getByLabel('Tailored — editable')).toHaveValue(/FastAPI/)
+  await expect(page.getByLabel('I reviewed this exact version')).not.toBeChecked()
+  await page.getByRole('link', { name: 'Track application', exact: true }).click()
+  await page
+    .getByRole('combobox', { name: 'Approved resume', exact: true })
+    .selectOption({ index: 1 })
+  await page.getByRole('button', { name: 'Add this job to my application tracker' }).click()
+  await expect(page.getByRole('combobox', { name: 'Stage', exact: true })).toBeVisible()
+  await page.getByRole('combobox', { name: 'Stage', exact: true }).selectOption('applied')
+  await expect(page.getByText('stage changed · applied')).toBeVisible()
+  await page
+    .getByLabel('Reminder time (your local time)')
+    .fill(new Date(Date.now() + 3_600_000).toISOString().slice(0, 16))
+  await page.getByRole('button', { name: 'Save reminder', exact: true }).click()
+  await expect(page.getByText(/Reminder saved\. It will appear/)).toBeVisible()
+  await page.getByRole('link', { name: 'Jobs', exact: true }).click()
+  await expect(page.getByRole('link', { name: /Review follow-up for API developer/ })).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('next-steps.png'), fullPage: true })
+  await page.setViewportSize({ width: 390, height: 844 })
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(
+    false,
+  )
+  await page.screenshot({ path: testInfo.outputPath('next-steps-mobile.png'), fullPage: true })
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.getByRole('link', { name: 'Prepare a new application', exact: true }).click()
+  await page.getByLabel('Role', { exact: true }).fill(`Second API role ${Date.now()}`)
+  await page.getByLabel('Company', { exact: true }).fill('Second synthetic company')
+  await page
+    .getByRole('textbox', { name: 'Job description', exact: true })
+    .fill('Build reliable Python FastAPI APIs with PostgreSQL and request tests.')
+  await page.getByRole('button', { name: 'Save target' }).click()
+  await expect(page).toHaveURL(/#\/jobs\/\d+\/prepare/)
+  await page.getByRole('combobox', { name: 'Saved resume to reuse' }).selectOption({ index: 1 })
+  page.once('dialog', (dialog) => dialog.accept())
+  await page.getByRole('button', { name: 'Use as starting draft' }).click()
+  await expect(page.getByLabel('Tailored — editable')).toHaveValue(/FastAPI/)
+  await expect(page.getByLabel('I reviewed this exact version')).not.toBeChecked()
+  await expect(page.getByText('No text changes from this starting version.')).toBeAttached()
+  await page.getByRole('button', { name: 'Preview PDF', exact: true }).click()
+  await page.getByLabel('I reviewed this exact version').check()
+  await page.getByRole('button', { name: 'Save version', exact: true }).click()
+  await expect(page.getByText(/Saved approved version 1/)).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('reused-resume.png'), fullPage: true })
+  for (const [tab, heading, file] of [
+    ['Choose projects', 'Choose the projects this role needs', 'projects'],
+    ['Documents', 'Saved document versions', 'documents'],
+    ['Track application', 'Application package and timeline', 'tracking'],
+    ['Contacts and outreach', 'Networking outreach kit', 'outreach'],
+    ['Interview practice', 'Interview practice', 'interview'],
+  ]) {
+    await page.getByRole('link', { name: tab, exact: true }).click()
+    await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+    await page.evaluate(() => document.fonts.ready)
+    await page.screenshot({ path: testInfo.outputPath(`${file}.png`), fullPage: true })
+    await page.setViewportSize({ width: 390, height: 844 })
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth),
+    ).toBe(false)
+    await page.screenshot({ path: testInfo.outputPath(`${file}-mobile.png`), fullPage: true })
+    await page.setViewportSize({ width: 1280, height: 800 })
+  }
+  for (const [tab, heading, file] of [
+    ['My evidence', 'Show what you’ve built.', 'evidence'],
+    ['Activity', 'Every next step, in view.', 'activity'],
+    ['Settings', 'Your space. Your say.', 'settings'],
+  ]) {
+    await page.getByRole('link', { name: tab, exact: true }).click()
+    await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+    await page.evaluate(() => document.fonts.ready)
+    await page.screenshot({ path: testInfo.outputPath(`${file}.png`), fullPage: true })
+    await page.setViewportSize({ width: 390, height: 844 })
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth),
+    ).toBe(false)
+    await page.screenshot({ path: testInfo.outputPath(`${file}-mobile.png`), fullPage: true })
+    await page.setViewportSize({ width: 1280, height: 800 })
+  }
+})
+
+test('illustrative sample is usable on a narrow screen', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/#/sample')
+  await expect(page.getByRole('heading', { name: 'Explore a sample application' })).toBeVisible()
+  await page.getByLabel('Sample target role').selectOption('retrieval')
+  await expect(page.getByText('Sample retrieval lab', { exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Download illustrative bullet' })).toBeDisabled()
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  )
+  expect(overflow).toBe(false)
+  await page.evaluate(() => document.fonts.ready)
+  await page.screenshot({ path: testInfo.outputPath('sample-mobile.png'), fullPage: true })
+})
+
+test('signed-out welcome keeps the sample accessible on desktop and mobile', async ({
+  page,
+}, testInfo) => {
+  await page.goto('http://127.0.0.1:5175')
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL('http://127.0.0.1:5175/')
+  await expect(page.getByRole('main')).toBeFocused()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your work,well represented.')
+  await page.getByRole('heading', { level: 1 }).click()
+  await page.evaluate(() => document.fonts.ready)
+  await page.screenshot({ path: testInfo.outputPath('welcome.png'), fullPage: true })
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.getByRole('button', { name: 'Explore sample workspace', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Explore a sample application' })).toBeVisible()
+  await page.getByLabel('Sample target role').selectOption('retrieval')
+  await expect(page.getByText('Sample retrieval lab', { exact: true })).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(
+    false,
+  )
+  await page.screenshot({ path: testInfo.outputPath('welcome-mobile.png'), fullPage: true })
+})
