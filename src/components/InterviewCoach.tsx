@@ -58,10 +58,10 @@ export function InterviewCoach(): React.JSX.Element {
         description="Practice with role context and a transparent checklist. Feedback is not a calibrated assessment or verification of your claims."
       >
         <div className="flex flex-wrap items-end gap-3">
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Interview type
             <select
-              className="mt-1 block min-h-11 rounded-xl border border-slate-300 px-3"
+              className="mt-1 block min-h-11 rounded-lg border border-ink-300 px-3"
               value={type}
               onChange={(event) => setType(event.target.value as typeof type)}
             >
@@ -87,11 +87,11 @@ export function InterviewCoach(): React.JSX.Element {
         {active && (
           <>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
-              <section className="rounded-xl bg-cyan-50 p-4 text-sm text-cyan-950">
-                <h3 className="font-black">
+              <section className="rounded-lg bg-brand-50 p-4 text-sm text-brand-950">
+                <h3 className="font-semibold">
                   Preparation brief · {active.prep_brief.estimated_minutes} minutes
                 </h3>
-                <p className="mt-2 font-bold">Talking points</p>
+                <p className="mt-2 font-medium">Talking points</p>
                 <ul className="mt-1 list-disc space-y-1 pl-5">
                   {talkingPoints.map((item) => (
                     <li key={item}>{item}</li>
@@ -99,16 +99,16 @@ export function InterviewCoach(): React.JSX.Element {
                 </ul>
                 <p className="mt-3 text-xs">{active.prep_brief.evidence_reminder}</p>
               </section>
-              <section className="rounded-xl bg-amber-50 p-4 text-sm text-amber-950">
-                <h3 className="font-black">Prepare for evidence gaps</h3>
+              <section className="rounded-lg bg-amber-50 p-4 text-sm text-amber-950">
+                <h3 className="font-semibold">Prepare for evidence gaps</h3>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {riskAreas.map((item) => (
-                    <span key={item} className="rounded-full bg-white px-2 py-1 text-xs font-bold">
+                    <span key={item} className="rounded-full bg-white px-2 py-1 text-xs font-medium">
                       {item}
                     </span>
                   ))}
                 </div>
-                <p className="mt-3 font-bold">Questions to ask</p>
+                <p className="mt-3 font-medium">Questions to ask</p>
                 <ul className="mt-1 list-disc space-y-1 pl-5">
                   {active.prep_brief.questions_to_ask.map((item) => (
                     <li key={item}>{item}</li>
@@ -120,15 +120,15 @@ export function InterviewCoach(): React.JSX.Element {
               {active.questions.map((question, index) => {
                 const saved = active.answers.find((item) => item.question_index === index)
                 return (
-                  <li key={question.id} className="rounded-xl border border-slate-200 p-4">
-                    <p className="text-xs font-black uppercase tracking-wider text-cyan-700">
+                  <li key={question.id} className="rounded-lg border border-ink-200 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-brand-700">
                       {question.type}
                     </p>
-                    <h3 className="mt-1 font-black text-slate-950">{question.question}</h3>
-                    <label className="mt-3 block text-sm font-bold text-slate-700">
+                    <h3 className="mt-1 font-semibold text-ink-950">{question.question}</h3>
+                    <label className="mt-3 block text-sm font-medium text-ink-700">
                       Your answer
                       <textarea
-                        className="mt-1 h-36 w-full rounded-xl border border-slate-300 p-3 font-normal leading-6"
+                        className="mt-1 h-36 w-full rounded-lg border border-ink-300 p-3 font-normal leading-6"
                         value={answers[index] ?? saved?.answer ?? ''}
                         onChange={(event) =>
                           setAnswers((current) => ({ ...current, [index]: event.target.value }))
@@ -150,8 +150,8 @@ export function InterviewCoach(): React.JSX.Element {
                       Score answer
                     </Button>
                     {saved && (
-                      <div className="mt-3 rounded-xl bg-slate-50 p-4 text-sm text-slate-800">
-                        <p className="font-bold">
+                      <div className="mt-3 rounded-lg bg-ink-50 p-4 text-sm text-ink-800">
+                        <p className="font-medium">
                           Practice checklist {saved.feedback.score.toFixed(0)} / 100
                         </p>
                         <p className="mt-1">{saved.feedback.feedback}</p>
@@ -175,14 +175,14 @@ export function InterviewCoach(): React.JSX.Element {
           {(history.data || []).map((session) => (
             <li key={session.id}>
               <button
-                className="w-full rounded-xl border border-slate-200 p-3 text-left hover:bg-slate-50"
+                className="w-full rounded-lg border border-ink-200 p-3 text-left hover:bg-ink-50"
                 onClick={() => {
                   setActive(session)
                   setAnswers({})
                 }}
               >
-                <span className="block font-bold capitalize">{session.interview_type}</span>
-                <span className="text-xs text-slate-500">
+                <span className="block font-medium capitalize">{session.interview_type}</span>
+                <span className="text-xs text-ink-500">
                   {session.status} · {session.answers.length}/{session.questions.length} answered
                 </span>
               </button>

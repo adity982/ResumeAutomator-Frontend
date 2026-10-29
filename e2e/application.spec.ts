@@ -1,7 +1,13 @@
 import { test, expect } from '@playwright/test'
 
-test('job to cited project draft to approved document and saved recovery', async ({ page }, testInfo) => {
+test('job to cited project draft to approved document and saved recovery', async ({
+  page,
+}, testInfo) => {
   await page.goto('/#/jobs/new')
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/#\/jobs\/new$/)
+  await expect(page.getByRole('main')).toBeFocused()
   await page
     .getByLabel('Parsed resume — editable')
     .fill(
@@ -48,7 +54,9 @@ test('job to cited project draft to approved document and saved recovery', async
   await expect(page.getByRole('link', { name: /Review follow-up for API developer/ })).toBeVisible()
   await page.screenshot({ path: testInfo.outputPath('next-steps.png'), fullPage: true })
   await page.setViewportSize({ width: 390, height: 844 })
-  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(
+    false,
+  )
   await page.screenshot({ path: testInfo.outputPath('next-steps-mobile.png'), fullPage: true })
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.getByRole('link', { name: 'Prepare a new application', exact: true }).click()
@@ -70,9 +78,43 @@ test('job to cited project draft to approved document and saved recovery', async
   await page.getByRole('button', { name: 'Save version', exact: true }).click()
   await expect(page.getByText(/Saved approved version 1/)).toBeVisible()
   await page.screenshot({ path: testInfo.outputPath('reused-resume.png'), fullPage: true })
+  for (const [tab, heading, file] of [
+    ['Choose projects', 'Choose the projects this role needs', 'projects'],
+    ['Documents', 'Saved document versions', 'documents'],
+    ['Track application', 'Application package and timeline', 'tracking'],
+    ['Contacts and outreach', 'Networking outreach kit', 'outreach'],
+    ['Interview practice', 'Interview practice', 'interview'],
+  ]) {
+    await page.getByRole('link', { name: tab, exact: true }).click()
+    await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+    await page.evaluate(() => document.fonts.ready)
+    await page.screenshot({ path: testInfo.outputPath(`${file}.png`), fullPage: true })
+    await page.setViewportSize({ width: 390, height: 844 })
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth),
+    ).toBe(false)
+    await page.screenshot({ path: testInfo.outputPath(`${file}-mobile.png`), fullPage: true })
+    await page.setViewportSize({ width: 1280, height: 800 })
+  }
+  for (const [tab, heading, file] of [
+    ['My evidence', 'Show what you’ve built.', 'evidence'],
+    ['Activity', 'Every next step, in view.', 'activity'],
+    ['Settings', 'Your space. Your say.', 'settings'],
+  ]) {
+    await page.getByRole('link', { name: tab, exact: true }).click()
+    await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+    await page.evaluate(() => document.fonts.ready)
+    await page.screenshot({ path: testInfo.outputPath(`${file}.png`), fullPage: true })
+    await page.setViewportSize({ width: 390, height: 844 })
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth),
+    ).toBe(false)
+    await page.screenshot({ path: testInfo.outputPath(`${file}-mobile.png`), fullPage: true })
+    await page.setViewportSize({ width: 1280, height: 800 })
+  }
 })
 
-test('illustrative sample is usable on a narrow screen', async ({ page }) => {
+test('illustrative sample is usable on a narrow screen', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/#/sample')
   await expect(page.getByRole('heading', { name: 'Explore a sample application' })).toBeVisible()
@@ -83,4 +125,28 @@ test('illustrative sample is usable on a narrow screen', async ({ page }) => {
     () => document.documentElement.scrollWidth > window.innerWidth,
   )
   expect(overflow).toBe(false)
+  await page.evaluate(() => document.fonts.ready)
+  await page.screenshot({ path: testInfo.outputPath('sample-mobile.png'), fullPage: true })
+})
+
+test('signed-out welcome keeps the sample accessible on desktop and mobile', async ({
+  page,
+}, testInfo) => {
+  await page.goto('http://127.0.0.1:5175')
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL('http://127.0.0.1:5175/')
+  await expect(page.getByRole('main')).toBeFocused()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your work,well represented.')
+  await page.evaluate(() => document.fonts.ready)
+  await page.screenshot({ path: testInfo.outputPath('welcome.png'), fullPage: true })
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.getByRole('button', { name: 'Explore sample workspace', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Explore a sample application' })).toBeVisible()
+  await page.getByLabel('Sample target role').selectOption('retrieval')
+  await expect(page.getByText('Sample retrieval lab', { exact: true })).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(
+    false,
+  )
+  await page.screenshot({ path: testInfo.outputPath('welcome-mobile.png'), fullPage: true })
 })

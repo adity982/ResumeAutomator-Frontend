@@ -28,10 +28,10 @@ export function PilotFeedback(): React.JSX.Element {
       description="Record how the workflow worked for you. Avoid personal contact details or confidential information in comments."
     >
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Task tried
           <select
-            className="mt-2 block w-full rounded-lg border border-slate-300 p-3"
+            className="mt-2 block w-full rounded-lg border border-ink-300 p-3"
             value={task}
             onChange={(event) => setTask(event.target.value)}
           >
@@ -41,10 +41,10 @@ export function PilotFeedback(): React.JSX.Element {
             <option value="outreach">Prepare outreach</option>
           </select>
         </label>
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Usefulness
           <select
-            className="mt-2 block w-full rounded-lg border border-slate-300 p-3"
+            className="mt-2 block w-full rounded-lg border border-ink-300 p-3"
             value={rating}
             onChange={(event) => setRating(Number(event.target.value))}
           >
@@ -55,10 +55,10 @@ export function PilotFeedback(): React.JSX.Element {
             ))}
           </select>
         </label>
-        <label className="text-sm font-bold md:col-span-2">
+        <label className="text-sm font-medium md:col-span-2">
           What was confusing or missing?
           <textarea
-            className="mt-2 h-24 w-full rounded-lg border border-slate-300 p-3 font-normal"
+            className="mt-2 h-24 w-full rounded-lg border border-ink-300 p-3 font-normal"
             maxLength={2000}
             value={comment}
             onChange={(event) => setComment(event.target.value)}

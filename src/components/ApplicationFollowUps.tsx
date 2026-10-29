@@ -37,27 +37,27 @@ export function ApplicationFollowUps({
     onSuccess: refresh,
   })
   return (
-    <section className="mt-6 border-t border-slate-200 pt-5">
-      <h3 className="font-bold text-slate-900">Plan your next follow-up</h3>
-      <p className="mt-1 text-sm text-slate-600">
+    <section className="mt-6 border-t border-ink-200 pt-5">
+      <h3 className="font-medium text-ink-900">Plan your next follow-up</h3>
+      <p className="mt-1 text-sm text-ink-600">
         Set your own reminder. Review any reply and the contact’s preferences before reaching out;
         the app sends nothing.
       </p>
       <div className="mt-3 flex flex-wrap items-end gap-3">
-        <label className="min-w-0 flex-1 text-sm font-bold">
+        <label className="min-w-0 flex-1 text-sm font-medium">
           Reminder title
           <input
-            className="mt-1 block min-h-11 w-full rounded-lg border border-slate-300 p-2"
+            className="mt-1 block min-h-11 w-full rounded-lg border border-ink-300 p-2"
             maxLength={240}
             value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
         </label>
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Reminder time (your local time)
           <input
             type="datetime-local"
-            className="mt-1 block min-h-11 max-w-full rounded-lg border border-slate-300 p-2"
+            className="mt-1 block min-h-11 max-w-full rounded-lg border border-ink-300 p-2"
             value={due}
             onChange={(event) => setDue(event.target.value)}
           />
@@ -75,11 +75,11 @@ export function ApplicationFollowUps({
         tone="error"
       />
       {create.isSuccess && (
-        <p role="status" className="mt-2 text-sm text-slate-600">
+        <p role="status" className="mt-2 text-sm text-ink-600">
           Reminder saved. It will appear in Your next steps when due within seven days.
         </p>
       )}
-      <ul className="mt-3 divide-y divide-slate-200">
+      <ul className="mt-3 divide-y divide-ink-200">
         {(tasks.data || [])
           .filter((task) => task.application_id === applicationId && !task.completed_at)
           .map((task) => (

@@ -35,7 +35,7 @@ export function JobWorkspace({ id }: { id: number }): React.JSX.Element {
     return (
       <Panel title="Job unavailable">
         <StatusMessage message={job.error?.message || 'This job was removed.'} tone="error" />
-        <a href="#/jobs" className="text-cyan-800 underline">
+        <a href="#/jobs" className="text-brand-800 underline">
           Back to jobs
         </a>
       </Panel>
@@ -50,20 +50,19 @@ export function JobWorkspace({ id }: { id: number }): React.JSX.Element {
   ]
   return (
     <div className="space-y-5">
-      <div>
-        <a className="text-sm text-cyan-300 underline" href="#/jobs">
+      <div className="job-heading">
+        <a className="eyebrow underline" href="#/jobs">
           All jobs
         </a>
-        <h2 className="mt-3 text-3xl font-bold text-white">{job.data.title}</h2>
-        <p className="mt-1 text-slate-400">
+        <h1 className="page-title">{job.data.title}</h1>
+        <p className="mt-4 text-sm text-ink-600">
           {job.data.company || 'Company not specified'} · Snapshot {job.data.version}
         </p>
       </div>
-      <nav className="flex gap-2 overflow-x-auto pb-2" aria-label="Job workspace">
+      <nav className="job-tabs" aria-label="Job workspace">
         {tabs.map(([value, label]) => (
           <a
             key={value}
-            className={`shrink-0 rounded-lg px-4 py-3 text-sm font-bold ${section === value ? 'bg-cyan-300 text-slate-950' : 'bg-slate-800 text-slate-200'}`}
             aria-current={section === value ? 'page' : undefined}
             href={`#/jobs/${id}/${value}`}
           >
@@ -80,7 +79,7 @@ export function JobWorkspace({ id }: { id: number }): React.JSX.Element {
         {section === 'interview' && <InterviewCoach key={id} />}
         {!tabs.some(([value]) => value === section) && (
           <Panel title="This page does not exist">
-            <a href={`#/jobs/${id}/prepare`} className="text-cyan-800 underline">
+            <a href={`#/jobs/${id}/prepare`} className="text-brand-800 underline">
               Prepare this application
             </a>
           </Panel>

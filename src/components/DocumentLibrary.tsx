@@ -63,15 +63,15 @@ export function DocumentLibrary({ jobId }: { jobId?: number }): React.JSX.Elemen
       />
       {documents.isLoading && <p role="status">Loading documents…</p>}
       {!documents.isLoading && !filtered.length && (
-        <p className="text-slate-600">
+        <p className="text-ink-600">
           No saved documents yet. Prepare a resume or cover letter, preview it, then save a version.
         </p>
       )}
       <div className="space-y-4">
         {filtered.map((document) => (
-          <article key={document.id} className="rounded-lg border border-slate-200 p-4">
-            <h3 className="font-bold">{document.title}</h3>
-            <p className="mt-1 text-sm text-slate-500">
+          <article key={document.id} className="rounded-lg border border-ink-200 p-4">
+            <h3 className="font-medium">{document.title}</h3>
+            <p className="mt-1 text-sm text-ink-500">
               {document.kind.replace('_', ' ')} · Version {document.version} ·{' '}
               {document.approved ? 'Approved snapshot' : 'Draft'} ·{' '}
               {new Date(document.created_at).toLocaleString()}

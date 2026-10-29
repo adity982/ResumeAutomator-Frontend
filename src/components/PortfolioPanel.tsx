@@ -20,39 +20,39 @@ function EvidenceReview({
     onSuccess: onSaved,
   })
   return (
-    <article className="rounded-xl border border-slate-200 p-4">
+    <article className="rounded-lg border border-ink-200 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <a
-          className="font-bold text-cyan-800 underline"
+          className="font-medium text-brand-800 underline"
           href={evidence.source_url}
           target="_blank"
           rel="noreferrer"
         >
           {evidence.path}:{evidence.start_line}-{evidence.end_line}
         </a>
-        <span className="text-sm text-slate-600">
+        <span className="text-sm text-ink-600">
           {evidence.review_status === 'approved'
             ? 'Contribution confirmed by you'
             : evidence.review_status}
         </span>
       </div>
       <details className="mt-3">
-        <summary className="cursor-pointer text-sm font-bold">Read source excerpt</summary>
-        <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap rounded-lg bg-slate-100 p-3 text-xs">
+        <summary className="cursor-pointer text-sm font-medium">Read source excerpt</summary>
+        <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap rounded-lg bg-ink-100 p-3 text-xs">
           {evidence.content}
         </pre>
       </details>
-      <label className="mt-4 block text-sm font-bold text-slate-700">
+      <label className="mt-4 block text-sm font-medium text-ink-700">
         What did you personally do?
         <textarea
-          className="mt-2 h-24 w-full rounded-lg border border-slate-300 p-3 font-normal"
+          className="mt-2 h-24 w-full rounded-lg border border-ink-300 p-3 font-normal"
           maxLength={1000}
           value={statement}
           onChange={(event) => setStatement(event.target.value)}
           placeholder="Describe your contribution, using only claims supported by this excerpt."
         />
       </label>
-      <p className="mt-2 text-xs text-slate-500">
+      <p className="mt-2 text-xs text-ink-500">
         Confirmation is your attestation. Repository code alone does not establish authorship or
         measured results.
       </p>
@@ -107,13 +107,13 @@ function SourceDetail({ source }: { source: PortfolioSource }): React.JSX.Elemen
     >
       {source.status !== 'ready' ? (
         <>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-ink-600">
             Select files to import. Secrets, generated files and oversized files are excluded.
             Review the excerpts before proceeding.
           </p>
           <div className="mt-4 grid gap-2 md:grid-cols-2">
             {source.files.map((file) => (
-              <details key={file.path} className="rounded-lg border border-slate-200 p-3">
+              <details key={file.path} className="rounded-lg border border-ink-200 p-3">
                 <summary>
                   <label className="inline-flex items-center gap-2 text-sm">
                     <input
@@ -130,17 +130,17 @@ function SourceDetail({ source }: { source: PortfolioSource }): React.JSX.Elemen
                     {file.path}
                   </label>
                 </summary>
-                <pre className="mt-2 overflow-auto whitespace-pre-wrap text-xs text-slate-600">
+                <pre className="mt-2 overflow-auto whitespace-pre-wrap text-xs text-ink-600">
                   {file.excerpt}
                 </pre>
               </details>
             ))}
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-[14rem_1fr]">
-            <label className="text-sm font-bold">
+            <label className="text-sm font-medium">
               Project relationship
               <select
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3"
+                className="mt-2 w-full rounded-lg border border-ink-300 p-3"
                 value={relationship}
                 onChange={(event) => setRelationship(event.target.value)}
               >
@@ -150,10 +150,10 @@ function SourceDetail({ source }: { source: PortfolioSource }): React.JSX.Elemen
                 <option value="contribution">Upstream contribution</option>
               </select>
             </label>
-            <label className="text-sm font-bold">
+            <label className="text-sm font-medium">
               Your role and contribution
               <textarea
-                className="mt-2 h-24 w-full rounded-lg border border-slate-300 p-3 font-normal"
+                className="mt-2 h-24 w-full rounded-lg border border-ink-300 p-3 font-normal"
                 value={contribution}
                 onChange={(event) => setContribution(event.target.value)}
                 maxLength={2000}
@@ -185,8 +185,8 @@ function SourceDetail({ source }: { source: PortfolioSource }): React.JSX.Elemen
         </>
       ) : (
         <>
-          <p className="text-sm text-slate-600">{source.contribution}</p>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="text-sm text-ink-600">{source.contribution}</p>
+          <p className="mt-2 text-sm text-ink-600">
             Review excerpts and write the contribution statements you want to reuse. Observations
             remain separate from personal claims.
           </p>
@@ -272,17 +272,17 @@ export function PortfolioPanel(): React.JSX.Element {
         title="Bring your work into the conversation"
         description="Import selected GitHub projects, inspect the evidence, and confirm your contribution before using it in a resume."
       >
-        <label className="block text-sm font-bold text-slate-700">
+        <label className="block text-sm font-medium text-ink-700">
           GitHub repository URL
           <input
-            className="mt-2 w-full rounded-xl border border-slate-300 p-3"
+            className="mt-2 w-full rounded-lg border border-ink-300 p-3"
             type="url"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
             placeholder="https://github.com/your-name/your-project"
           />
         </label>
-        <label className="mt-3 flex items-center gap-2 text-sm text-slate-700">
+        <label className="mt-3 flex items-center gap-2 text-sm text-ink-700">
           <input
             type="checkbox"
             checked={useConnection}
@@ -314,11 +314,11 @@ export function PortfolioPanel(): React.JSX.Element {
         {(sources.data || []).map((source) => (
           <article
             key={source.id}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-700 bg-slate-900 p-4 text-white"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-ink-200 bg-white p-5 text-ink-950"
           >
             <button className="text-left" onClick={() => setSelected(source.id)}>
               <strong className="block">{source.repository}</strong>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-ink-500">
                 {source.status} · {source.commit_sha.slice(0, 8)}
               </span>
             </button>
@@ -342,7 +342,7 @@ export function PortfolioPanel(): React.JSX.Element {
         .filter((item) => ['queued', 'running', 'failed'].includes(item.status))
         .map((item) => (
           <Panel key={item.id} title={`Import ${item.id}: ${item.status}`}>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-ink-600">
               {item.error || 'Processing selected files in the background.'}
             </p>
             {item.status !== 'failed' && (

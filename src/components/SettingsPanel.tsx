@@ -30,7 +30,7 @@ export function SettingsPanel({
         title="Your data and account"
         description="Control what you keep. No LinkedIn messages or connection requests are sent by this application."
       >
-        <div className="max-w-3xl space-y-4 text-sm leading-7 text-slate-600">
+        <div className="max-w-3xl space-y-4 text-sm leading-7 text-ink-600">
           <p>
             Uploaded PDF bytes are parsed in memory. Saved progress, document text, imported public
             source excerpts, approved statements, interview answers and outreach drafts are stored

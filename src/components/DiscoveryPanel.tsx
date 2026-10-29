@@ -51,50 +51,50 @@ export function DiscoveryPanel(): React.JSX.Element {
         description="Preferences shape explainable recommendations and provider deep links; this feature does not scrape job boards."
       >
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Search name
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={name}
               onChange={(event) => setName(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Desired titles, comma separated
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={titles}
               onChange={(event) => setTitles(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Excluded titles
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={excluded}
               onChange={(event) => setExcluded(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Priority skills
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={skills}
               onChange={(event) => setSkills(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Locations
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={locations}
               onChange={(event) => setLocations(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Work mode
             <select
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={workMode}
               onChange={(event) => setWorkMode(event.target.value)}
             >
@@ -125,19 +125,19 @@ export function DiscoveryPanel(): React.JSX.Element {
         <Panel title={active.name} description={`${active.results.length} search suggestions`}>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {active.results.map((result) => (
-              <article key={result.title} className="rounded-xl border border-slate-200 p-4">
+              <article key={result.title} className="rounded-lg border border-ink-200 p-4">
                 <div className="flex justify-between gap-3">
-                  <h3 className="font-black text-slate-950">{result.title}</h3>
-                  <span className="font-mono font-black text-cyan-700">
+                  <h3 className="font-semibold text-ink-950">{result.title}</h3>
+                  <span className="font-mono font-semibold text-brand-700">
                     {result.fit_score === null ? 'Search link' : result.fit_score}
                   </span>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{result.reason}</p>
+                <p className="mt-2 text-sm leading-6 text-ink-600">{result.reason}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {Object.entries(result.links).map(([provider, link]) => (
                     <a
                       key={provider}
-                      className="rounded-lg bg-slate-900 px-3 py-2 text-xs font-bold text-white"
+                      className="rounded-lg bg-ink-900 px-3 py-2 text-xs font-medium text-white"
                       href={link}
                       target="_blank"
                       rel="noreferrer"
@@ -156,7 +156,7 @@ export function DiscoveryPanel(): React.JSX.Element {
           {(searches.data || []).map((search) => (
             <button
               key={search.id}
-              className="rounded-full border border-slate-300 px-3 py-2 text-sm font-bold"
+              className="rounded-full border border-ink-300 px-3 py-2 text-sm font-medium"
               onClick={() => setActive(search)}
             >
               {search.name}

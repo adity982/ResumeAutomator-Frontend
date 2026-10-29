@@ -99,10 +99,10 @@ export function DocumentPreview({
         <ResumeChangeReview original={tailored?.original || ''} draft={content} />
       )}
       <div className="mb-4 flex flex-wrap items-end gap-3">
-        <label className="text-sm font-bold text-slate-700">
+        <label className="text-sm font-medium text-ink-700">
           Template
           <select
-            className="mt-1 block min-h-11 rounded-xl border border-slate-300 bg-white px-3"
+            className="mt-1 block min-h-11 rounded-lg border border-ink-300 bg-white px-3"
             value={template}
             onChange={(event) => setTemplate(event.target.value as (typeof templates)[number])}
           >
@@ -113,7 +113,7 @@ export function DocumentPreview({
             ))}
           </select>
         </label>
-        <label className="flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 px-3 text-sm font-bold text-slate-700">
+        <label className="flex min-h-11 items-center gap-2 rounded-lg border border-ink-200 px-3 text-sm font-medium text-ink-700">
           <input
             type="checkbox"
             checked={approved}
@@ -168,11 +168,11 @@ export function DocumentPreview({
         <>
           <iframe
             title="Exported PDF preview"
-            className="mt-5 h-[45rem] w-full rounded-lg border border-slate-300"
+            className="mt-5 h-[45rem] w-full rounded-lg border border-ink-300"
             src={preview.url}
           />
           <a
-            className="mt-2 inline-block text-sm text-cyan-800 underline"
+            className="mt-2 inline-block text-sm text-brand-800 underline"
             target="_blank"
             rel="noreferrer"
             href={preview.url}
@@ -181,7 +181,7 @@ export function DocumentPreview({
           </a>
         </>
       ) : (
-        <p className="rounded-xl bg-slate-50 p-5 text-sm text-slate-600">
+        <p className="rounded-lg bg-ink-50 p-5 text-sm text-ink-600">
           Generate a fresh preview after changing the document. Review pagination, names and links
           before approving.
         </p>

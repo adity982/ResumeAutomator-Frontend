@@ -76,70 +76,70 @@ export function AnalyticsDashboard(): React.JSX.Element {
         description="Metrics and sample sizes update to the selected reporting window."
       >
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             From
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               type="date"
               value={dateFrom}
               onChange={(event) => setDateFrom(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             To
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               type="date"
               value={dateTo}
               onChange={(event) => setDateTo(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Company
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={company}
               onChange={(event) => setCompany(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Role
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={role}
               onChange={(event) => setRole(event.target.value)}
             />
           </label>
         </div>
       </Panel>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="metric-grid grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Panel title="Average match">
-          <p className="font-mono text-4xl font-black text-cyan-700">
+          <p className="font-mono text-4xl font-semibold text-brand-700">
             {data.average_match_score?.toFixed(1) ?? '—'}
           </p>
-          <p className="mt-1 text-xs text-slate-500">Across {data.sample_size} recorded analyses</p>
+          <p className="mt-1 text-xs text-ink-500">Across {data.sample_size} recorded analyses</p>
         </Panel>
         <Panel title="Interview conversion">
-          <p className="font-mono text-4xl font-black text-cyan-700">
+          <p className="font-mono text-4xl font-semibold text-brand-700">
             {data.interview_conversion_rate !== null
               ? `${data.interview_conversion_rate.toFixed(1)}%`
               : '—'}
           </p>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-ink-500">
             Applied applications reaching interview or later
           </p>
         </Panel>
         <Panel title="Applications">
-          <p className="font-mono text-4xl font-black text-cyan-700">
+          <p className="font-mono text-4xl font-semibold text-brand-700">
             {Object.values(data.applications_by_stage).reduce((total, value) => total + value, 0)}
           </p>
-          <p className="mt-1 text-xs text-slate-500">Across all pipeline stages</p>
+          <p className="mt-1 text-xs text-ink-500">Across all pipeline stages</p>
         </Panel>
         <Panel title="Data controls">
           <Button variant="secondary" onClick={() => exportCsv(data)}>
             Export CSV
           </Button>
-          <p className="mt-2 text-xs text-slate-500">Exports the underlying defined metrics.</p>
+          <p className="mt-2 text-xs text-ink-500">Exports the underlying defined metrics.</p>
         </Panel>
       </div>
       {data.sample_size < 3 && (
@@ -161,12 +161,12 @@ export function AnalyticsDashboard(): React.JSX.Element {
                   <XAxis dataKey="stage" />
                   <YAxis allowDecimals={false} />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#0891b2" />
+                  <Bar dataKey="count" fill="#61796a" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           ) : (
-            <p className="rounded-xl bg-slate-50 p-6 text-slate-600">
+            <p className="rounded-lg bg-ink-50 p-6 text-ink-600">
               No application-stage data yet.
             </p>
           )}
@@ -186,12 +186,12 @@ export function AnalyticsDashboard(): React.JSX.Element {
                   <XAxis dataKey="date" />
                   <YAxis domain={[0, 100]} />
                   <Tooltip />
-                  <Line type="monotone" dataKey="score" stroke="#0891b2" strokeWidth={3} />
+                  <Line type="monotone" dataKey="score" stroke="#80608e" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           ) : (
-            <p className="rounded-xl bg-slate-50 p-6 text-slate-600">
+            <p className="rounded-lg bg-ink-50 p-6 text-ink-600">
               Run an analysis to create a score history.
             </p>
           )}
@@ -201,7 +201,7 @@ export function AnalyticsDashboard(): React.JSX.Element {
             {data.recurring_gaps.map((gap) => (
               <span
                 key={gap.keyword}
-                className="rounded-full bg-rose-50 px-3 py-2 text-sm font-bold text-rose-800"
+                className="rounded-full bg-rose-50 px-3 py-2 text-sm font-medium text-rose-800"
               >
                 {gap.keyword} · {gap.count}
               </span>
@@ -216,18 +216,18 @@ export function AnalyticsDashboard(): React.JSX.Element {
         <StatusMessage message={history.error?.message || null} tone="error" />
         <div className="grid gap-3 lg:grid-cols-2">
           {(history.data || []).map((scan) => (
-            <article key={scan.id} className="rounded-xl border border-slate-200 p-4">
+            <article key={scan.id} className="rounded-lg border border-ink-200 p-4">
               <div className="flex items-center justify-between gap-3">
-                <p className="font-black text-slate-950">Score {scan.score.toFixed(1)}</p>
-                <time className="text-xs text-slate-500">
+                <p className="font-semibold text-ink-950">Score {scan.score.toFixed(1)}</p>
+                <time className="text-xs text-ink-500">
                   {new Date(scan.created_at).toLocaleString()}
                 </time>
               </div>
-              <p className="mt-2 font-mono text-xs text-slate-500" title={scan.input_fingerprint}>
+              <p className="mt-2 font-mono text-xs text-ink-500" title={scan.input_fingerprint}>
                 Evidence fingerprint {scan.input_fingerprint.slice(0, 12)}…
               </p>
-              <p className="mt-2 text-sm font-bold text-cyan-800">{scan.methodology.label}</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-600">
+              <p className="mt-2 text-sm font-medium text-brand-800">{scan.methodology.label}</p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-ink-600">
                 {scan.methodology.limitations.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -236,7 +236,7 @@ export function AnalyticsDashboard(): React.JSX.Element {
           ))}
         </div>
         {!history.isLoading && (history.data || []).length === 0 && (
-          <p className="rounded-xl bg-slate-50 p-6 text-slate-600">No analyses recorded yet.</p>
+          <p className="rounded-lg bg-ink-50 p-6 text-ink-600">No analyses recorded yet.</p>
         )}
       </Panel>
     </div>

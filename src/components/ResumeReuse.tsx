@@ -47,10 +47,10 @@ export function ResumeReuse(): React.JSX.Element | null {
       description="Choose a saved resume instead of rewriting from scratch. This creates a fresh draft for the current job; the saved version stays intact."
     >
       <div className="flex flex-wrap items-end gap-3">
-        <label className="min-w-0 flex-1 text-sm font-bold text-slate-700">
+        <label className="min-w-0 flex-1 text-sm font-medium text-ink-700">
           Saved resume to reuse
           <select
-            className="mt-2 block min-h-11 w-full rounded-xl border border-slate-300 p-3"
+            className="mt-2 block min-h-11 w-full rounded-lg border border-ink-300 p-3"
             value={selected}
             onChange={(event) => setSelected(event.target.value)}
           >
@@ -80,7 +80,7 @@ export function ResumeReuse(): React.JSX.Element | null {
         </Button>
       </div>
       {!documents.isLoading && !latest.length && (
-        <p className="mt-3 text-sm text-slate-600">
+        <p className="mt-3 text-sm text-ink-600">
           Save a resume version once, then reuse it for another target here.
         </p>
       )}
@@ -91,7 +91,7 @@ export function ResumeReuse(): React.JSX.Element | null {
       {reuse.data &&
         workspace.data.resume_text === reuse.data.content &&
         workspace.selectedJob.id === reuse.data.job_id && (
-          <p className="mt-3 text-sm text-slate-700" role="status">
+          <p className="mt-3 text-sm text-ink-700" role="status">
             Copied {reuse.data.source_title} v{reuse.data.source_version}. Check company names and
             relevance, then preview and approve again.
           </p>

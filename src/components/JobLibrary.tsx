@@ -43,13 +43,14 @@ export function JobLibrary(): React.JSX.Element {
 
   return (
     <Panel
+      className="jobs-panel"
       title="Saved job library"
-      description="Every refresh creates a new normalized snapshot instead of overwriting history."
+      description="The opportunities you’re considering. Open one to pick up where you left off."
     >
-      <label className="block max-w-lg text-sm font-bold text-slate-700">
+      <label className="block max-w-lg text-sm font-medium text-ink-700">
         Search saved jobs
         <input
-          className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+          className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
           type="search"
           value={search}
           onChange={(event) => {
@@ -58,7 +59,7 @@ export function JobLibrary(): React.JSX.Element {
           }}
         />
       </label>
-      <label className="mt-3 flex items-center gap-2 text-sm text-slate-700">
+      <label className="mt-3 flex items-center gap-2 text-sm text-ink-700">
         <input
           type="checkbox"
           checked={archived}
@@ -85,26 +86,26 @@ export function JobLibrary(): React.JSX.Element {
         </p>
       )}
       {!jobs.isLoading && filtered.length === 0 && (
-        <p className="mt-4 rounded-xl bg-slate-50 p-6 text-slate-600">
+        <p className="mt-4 rounded-lg bg-ink-50 p-6 text-ink-600">
           No saved jobs match this search.
         </p>
       )}
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      <div className="job-list">
         {filtered.map((job) => (
-          <article key={job.id} className="rounded-xl border border-slate-200 p-4">
+          <article key={job.id} className="job-row">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h3 className="font-black text-slate-950">{job.title}</h3>
-                <p className="text-sm text-slate-600">
+                <h3 className="font-semibold text-ink-950">{job.title}</h3>
+                <p className="text-sm text-ink-600">
                   {job.company || 'Company not set'} · {job.location || 'Location not set'}
                 </p>
               </div>
-              <span className="rounded-full bg-cyan-50 px-2 py-1 text-xs font-bold text-cyan-800">
+              <span className="version-label" title="Saved job snapshot">
                 v{job.version}
               </span>
             </div>
-            <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">{job.description}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <p className="mt-3 line-clamp-3 text-sm leading-6 text-ink-600">{job.description}</p>
+            <div className="job-row-actions">
               <Button
                 onClick={() => {
                   setSelectedJob(job)
@@ -114,7 +115,7 @@ export function JobLibrary(): React.JSX.Element {
                 Open application workspace
               </Button>
               <Button
-                variant="secondary"
+                variant="ghost"
                 disabled={!job.source_url}
                 busy={refresh.isPending}
                 onClick={() => refresh.mutate(job.id)}
@@ -122,7 +123,7 @@ export function JobLibrary(): React.JSX.Element {
                 Refresh snapshot
               </Button>
               <Button
-                variant="secondary"
+                variant="ghost"
                 onClick={() => archive.mutate({ id: job.id, archived: !job.archived })}
               >
                 {job.archived ? 'Restore' : 'Archive'}

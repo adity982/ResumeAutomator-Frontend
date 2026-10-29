@@ -82,37 +82,37 @@ export function ContactsPanel({
           ['How you know them', relationship, setRelationship],
           ['Hiring signal source URL', signalUrl, setSignalUrl],
         ].map(([label, value, setter]) => (
-          <label key={label as string} className="text-sm font-bold">
+          <label key={label as string} className="text-sm font-medium">
             {label as string}
             <input
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-normal"
+              className="mt-2 w-full rounded-lg border border-ink-300 p-3 font-normal"
               value={value as string}
               onChange={(event) => (setter as (v: string) => void)(event.target.value)}
             />
           </label>
         ))}
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Hiring signal observed on
           <input
-            className="mt-2 w-full rounded-lg border border-slate-300 p-3"
+            className="mt-2 w-full rounded-lg border border-ink-300 p-3"
             type="date"
             value={observed}
             onChange={(event) => setObserved(event.target.value)}
           />
         </label>
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           What explicitly indicates hiring?
           <textarea
-            className="mt-2 h-24 w-full rounded-lg border border-slate-300 p-3 font-normal"
+            className="mt-2 h-24 w-full rounded-lg border border-ink-300 p-3 font-normal"
             value={signal}
             onChange={(event) => setSignal(event.target.value)}
             placeholder="For example, a post inviting applications. Leave blank if unknown."
           />
         </label>
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Follow-up date
           <input
-            className="mt-2 w-full rounded-lg border border-slate-300 p-3"
+            className="mt-2 w-full rounded-lg border border-ink-300 p-3"
             type="datetime-local"
             value={followUp}
             onChange={(event) => setFollowUp(event.target.value)}
@@ -139,18 +139,18 @@ export function ContactsPanel({
       />
       <div className="mt-5 space-y-4">
         {(contacts.data || []).map((contact) => (
-          <article key={contact.id} className="rounded-xl border border-slate-200 p-4">
-            <h3 className="font-bold">
+          <article key={contact.id} className="rounded-lg border border-ink-200 p-4">
+            <h3 className="font-medium">
               {contact.name} · {contact.role || 'Role unknown'}
             </h3>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-ink-600">
               {contact.hiring_signal
                 ? `User-recorded signal: ${contact.hiring_signal}`
                 : 'Hiring status unknown'}
             </p>
             {contact.signal_url && (
               <a
-                className="mt-2 block text-sm text-cyan-800 underline"
+                className="mt-2 block text-sm text-brand-800 underline"
                 href={contact.signal_url}
                 target="_blank"
                 rel="noreferrer"
@@ -172,7 +172,7 @@ export function ContactsPanel({
               </Button>
               {contact.linkedin_url && (
                 <a
-                  className="text-sm font-bold text-cyan-800 underline"
+                  className="text-sm font-medium text-brand-800 underline"
                   href={contact.linkedin_url}
                   target="_blank"
                   rel="noreferrer"
@@ -183,7 +183,7 @@ export function ContactsPanel({
               <label className="text-sm">
                 Contact status
                 <select
-                  className="ml-2 rounded-lg border border-slate-300 p-2"
+                  className="ml-2 rounded-lg border border-ink-300 p-2"
                   value={contact.status}
                   onChange={(event) =>
                     update.mutate({

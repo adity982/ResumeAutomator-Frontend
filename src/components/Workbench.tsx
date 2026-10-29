@@ -143,10 +143,10 @@ export function Workbench(): React.JSX.Element {
           title="1. Resume evidence"
           description="PDF bytes are parsed in memory. Saved progress and document versions retain text in your account."
         >
-          <label className="block text-sm font-bold text-slate-700">
+          <label className="block text-sm font-medium text-ink-700">
             Upload a selectable-text PDF
             <input
-              className="mt-2 block w-full rounded-xl border border-slate-300 p-3 file:mr-4 file:rounded-lg file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:font-bold file:text-white"
+              className="mt-2 block w-full rounded-lg border border-ink-300 p-3 file:mr-4 file:rounded-lg file:border-0 file:bg-ink-900 file:px-3 file:py-2 file:font-medium file:text-white"
               type="file"
               accept="application/pdf,.pdf"
               onChange={(event) => {
@@ -155,10 +155,10 @@ export function Workbench(): React.JSX.Element {
               }}
             />
           </label>
-          <label className="mt-4 block text-sm font-bold text-slate-700">
+          <label className="mt-4 block text-sm font-medium text-ink-700">
             Parsed resume — editable
             <textarea
-              className="mt-2 h-72 w-full rounded-xl border border-slate-300 p-4 font-mono text-sm leading-6 focus:ring-2 focus:ring-cyan-500"
+              className="mt-2 h-72 w-full rounded-lg border border-ink-300 p-4 font-mono text-sm leading-6 focus:ring-2 focus:ring-brand-500"
               value={resumeText}
               onChange={(event) => setResumeText(event.target.value)}
               placeholder="Upload a PDF or paste resume text here."
@@ -181,14 +181,14 @@ export function Workbench(): React.JSX.Element {
           description="Paste a job description or fetch a public posting. Save the target before choosing project evidence."
         >
           <div
-            className="mb-4 flex rounded-xl bg-slate-100 p-1"
+            className="mb-4 flex rounded-lg bg-ink-100 p-1"
             role="group"
             aria-label="Job source"
           >
             {(['manual', 'url'] as const).map((mode) => (
               <button
                 key={mode}
-                className={`min-h-11 flex-1 rounded-lg px-3 text-sm font-bold ${sourceMode === mode ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600'}`}
+                className={`min-h-11 flex-1 rounded-lg px-3 text-sm font-medium ${sourceMode === mode ? 'bg-white text-ink-950 ' : 'text-ink-600'}`}
                 aria-pressed={sourceMode === mode}
                 onClick={() => setSourceMode(mode)}
               >
@@ -198,10 +198,10 @@ export function Workbench(): React.JSX.Element {
           </div>
           {sourceMode === 'url' && (
             <div className="mb-4 flex gap-2">
-              <label className="flex-1 text-sm font-bold text-slate-700">
+              <label className="flex-1 text-sm font-medium text-ink-700">
                 Public job URL
                 <input
-                  className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+                  className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
                   type="url"
                   value={url}
                   onChange={(event) => setUrl(event.target.value)}
@@ -218,27 +218,27 @@ export function Workbench(): React.JSX.Element {
             </div>
           )}
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="text-sm font-bold text-slate-700">
+            <label className="text-sm font-medium text-ink-700">
               Role
               <input
-                className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+                className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
                 value={jobTitle}
                 onChange={(event) => setJobTitle(event.target.value)}
               />
             </label>
-            <label className="text-sm font-bold text-slate-700">
+            <label className="text-sm font-medium text-ink-700">
               Company
               <input
-                className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+                className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
                 value={company}
                 onChange={(event) => setCompany(event.target.value)}
               />
             </label>
           </div>
-          <label className="mt-4 block text-sm font-bold text-slate-700">
+          <label className="mt-4 block text-sm font-medium text-ink-700">
             Job description
             <textarea
-              className="mt-2 h-56 w-full rounded-xl border border-slate-300 p-4 text-sm leading-6 focus:ring-2 focus:ring-cyan-500"
+              className="mt-2 h-56 w-full rounded-lg border border-ink-300 p-4 text-sm leading-6 focus:ring-2 focus:ring-brand-500"
               value={jdText}
               onChange={(event) => setJdText(event.target.value)}
               placeholder="Paste at least 30 characters."
@@ -283,7 +283,7 @@ export function Workbench(): React.JSX.Element {
             {verifiedTags.map((tag) => (
               <button
                 key={tag}
-                className={`rounded-full border px-3 py-2 text-sm font-bold ${confirmedFacts.includes(tag) ? 'border-cyan-700 bg-cyan-700 text-white' : 'border-slate-300 bg-white text-slate-700'}`}
+                className={`rounded-full border px-3 py-2 text-sm font-medium ${confirmedFacts.includes(tag) ? 'border-brand-700 bg-brand-700 text-white' : 'border-ink-300 bg-white text-ink-700'}`}
                 aria-pressed={confirmedFacts.includes(tag)}
                 onClick={() =>
                   setConfirmedFacts((current) =>
@@ -319,7 +319,7 @@ export function Workbench(): React.JSX.Element {
             </Button>
             {selectedJob && (
               <a
-                className="rounded-xl border border-slate-500 px-4 py-3 text-sm font-bold text-white"
+                className="ui-button button-secondary"
                 href={`#/jobs/${selectedJob.id}/projects`}
               >
                 Choose project evidence
@@ -351,7 +351,7 @@ export function Workbench(): React.JSX.Element {
           description="Edit the generated draft before saving or exporting."
         >
           <textarea
-            className="h-80 w-full rounded-xl border border-slate-300 p-4 text-sm leading-6"
+            className="h-80 w-full rounded-lg border border-ink-300 p-4 text-sm leading-6"
             value={coverLetter}
             onChange={(event) => setCoverLetter(event.target.value)}
           />
@@ -367,8 +367,8 @@ export function Workbench(): React.JSX.Element {
         </Suspense>
       )}
 
-      <details className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <summary className="cursor-pointer text-lg font-black text-slate-950">
+      <details className="rounded-xl border border-ink-200 bg-white p-5 ">
+        <summary className="cursor-pointer text-lg font-semibold text-ink-950">
           Compare multiple jobs
         </summary>
         <div className="mt-5">

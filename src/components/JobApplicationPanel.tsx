@@ -62,10 +62,10 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
       description="Attach approved document snapshots and record what happened. Stage history drives your conversion metrics."
     >
       <div className="grid gap-4 md:grid-cols-3">
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Approved resume
           <select
-            className="mt-2 block w-full rounded-lg border border-slate-300 p-3"
+            className="mt-2 block w-full rounded-lg border border-ink-300 p-3"
             value={resume}
             onChange={(event) => setResume(event.target.value)}
           >
@@ -77,10 +77,10 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
             ))}
           </select>
         </label>
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Approved cover letter
           <select
-            className="mt-2 block w-full rounded-lg border border-slate-300 p-3"
+            className="mt-2 block w-full rounded-lg border border-ink-300 p-3"
             value={letter}
             onChange={(event) => setLetter(event.target.value)}
           >
@@ -92,10 +92,10 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
             ))}
           </select>
         </label>
-        <label className="text-sm font-bold">
+        <label className="text-sm font-medium">
           Deadline if known
           <input
-            className="mt-2 block w-full rounded-lg border border-slate-300 p-3"
+            className="mt-2 block w-full rounded-lg border border-ink-300 p-3"
             type="date"
             value={deadline}
             onChange={(event) => setDeadline(event.target.value)}
@@ -112,10 +112,10 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
             >
               Attach selected versions
             </Button>
-            <label className="text-sm font-bold">
+            <label className="text-sm font-medium">
               Stage
               <select
-                className="ml-2 rounded-lg border border-slate-300 p-3"
+                className="ml-2 rounded-lg border border-ink-300 p-3"
                 value={application.stage}
                 onChange={(event) => update.mutate(event.target.value as ApplicationStage)}
               >
@@ -124,7 +124,7 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
                 ))}
               </select>
             </label>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-ink-600">
               Current package: resume {application.resume_document_id || 'not attached'}, cover
               letter {application.cover_letter_document_id || 'not attached'}
             </p>
@@ -148,7 +148,7 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
         tone="error"
       />
       {!eligible('resume').length && (
-        <p className="mt-3 text-sm text-slate-600">
+        <p className="mt-3 text-sm text-ink-600">
           Next step: preview and approve a resume in Prepare application.
         </p>
       )}
@@ -162,12 +162,12 @@ export function JobApplicationPanel({ job }: { job: Job }): React.JSX.Element {
       {events.data && (
         <ol className="mt-6 space-y-3">
           {events.data.map((event) => (
-            <li key={event.id} className="border-l-2 border-cyan-200 pl-4 text-sm">
-              <p className="font-bold">
+            <li key={event.id} className="border-l-2 border-brand-200 pl-4 text-sm">
+              <p className="font-medium">
                 {event.event_type.replaceAll('_', ' ')}
                 {event.to_stage ? ` · ${event.to_stage}` : ''}
               </p>
-              <time className="text-slate-500">{new Date(event.created_at).toLocaleString()}</time>
+              <time className="text-ink-500">{new Date(event.created_at).toLocaleString()}</time>
             </li>
           ))}
         </ol>

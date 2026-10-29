@@ -71,34 +71,34 @@ export function OutreachStudio(): React.JSX.Element {
         description="Generate editable variants for each channel. Nothing is sent automatically."
       >
         <div className="grid gap-3 md:grid-cols-4">
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Recipient name
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={recipientName}
               onChange={(event) => setRecipientName(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Recipient role
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={recipientRole}
               onChange={(event) => setRecipientRole(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Company
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={company}
               onChange={(event) => setCompany(event.target.value)}
             />
           </label>
-          <label className="text-sm font-bold text-slate-700">
+          <label className="text-sm font-medium text-ink-700">
             Tone
             <select
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={tone}
               onChange={(event) => setTone(event.target.value)}
             >
@@ -107,10 +107,10 @@ export function OutreachStudio(): React.JSX.Element {
               <option value="concise">Concise</option>
             </select>
           </label>
-          <label className="text-sm font-bold text-slate-700 md:col-span-2">
+          <label className="text-sm font-medium text-ink-700 md:col-span-2">
             Call to action
             <input
-              className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3"
+              className="mt-1 min-h-11 w-full rounded-lg border border-ink-300 px-3"
               value={callToAction}
               onChange={(event) => setCallToAction(event.target.value)}
             />
@@ -143,10 +143,10 @@ export function OutreachStudio(): React.JSX.Element {
             title={`Saved outreach draft · revision ${active.revision}`}
             className="lg:col-span-2"
           >
-            <label className="text-sm font-bold">
+            <label className="text-sm font-medium">
               Manual delivery status
               <select
-                className="ml-3 rounded-lg border border-slate-300 p-2"
+                className="ml-3 rounded-lg border border-ink-300 p-2"
                 value={active.status}
                 onChange={(event) =>
                   setActive({ ...active, status: event.target.value as OutreachKit['status'] })
@@ -160,7 +160,7 @@ export function OutreachStudio(): React.JSX.Element {
             <Button className="ml-3" busy={save.isPending} onClick={() => save.mutate()}>
               Save edits and status
             </Button>
-            <p className="mt-3 text-sm text-slate-500">
+            <p className="mt-3 text-sm text-ink-500">
               Status is recorded by you. The app does not send messages or read LinkedIn replies.
             </p>
           </Panel>
@@ -184,10 +184,10 @@ export function OutreachStudio(): React.JSX.Element {
                 </Button>
               }
             >
-              <label className="text-sm font-bold">
+              <label className="text-sm font-medium">
                 Edit {field.replaceAll('_', ' ')}
                 <textarea
-                  className="mt-2 h-48 w-full rounded-lg border border-slate-300 p-3 font-normal leading-6"
+                  className="mt-2 h-48 w-full rounded-lg border border-ink-300 p-3 font-normal leading-6"
                   value={active.variants[field]}
                   onChange={(event) =>
                     setActive({
@@ -202,10 +202,10 @@ export function OutreachStudio(): React.JSX.Element {
           <Panel title="Follow-up sequence" className="lg:col-span-2">
             <ol className="space-y-3">
               {active.variants.follow_ups.map((value, index) => (
-                <li key={value} className="rounded-xl bg-slate-50 p-3 text-sm">
+                <li key={value} className="rounded-lg bg-ink-50 p-3 text-sm">
                   <strong>Follow-up {index + 1}:</strong> {value}{' '}
                   <button
-                    className="ml-2 font-bold text-cyan-700 underline"
+                    className="ml-2 font-medium text-brand-700 underline"
                     onClick={() => void copy(`Follow-up ${index + 1}`, value)}
                   >
                     Copy
@@ -221,7 +221,7 @@ export function OutreachStudio(): React.JSX.Element {
           {(history.data || []).map((kit) => (
             <button
               key={kit.id}
-              className="rounded-full border border-slate-300 px-3 py-2 text-sm font-bold hover:bg-slate-50"
+              className="rounded-full border border-ink-300 px-3 py-2 text-sm font-medium hover:bg-ink-50"
               onClick={() => setActive(kit)}
             >
               {kit.company || 'Untitled'} · {kit.recipient_role}

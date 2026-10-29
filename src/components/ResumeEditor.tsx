@@ -51,7 +51,7 @@ export function ResumeEditor({
       {(result.citations || []).map((citation) => (
         <a
           key={citation.evidence_id}
-          className="mr-4 text-sm font-bold text-cyan-800 underline"
+          className="mr-4 text-sm font-medium text-brand-800 underline"
           href={citation.url}
           target="_blank"
           rel="noreferrer"
@@ -74,22 +74,22 @@ export function ResumeEditor({
         >
           Redo
         </Button>
-        <span className="text-xs text-slate-500" role="status">
+        <span className="text-xs text-ink-500" role="status">
           Use Save progress to resume later. {sections.length} sections detected.
         </span>
       </div>
       {result.added_phrases.length > 0 && (
-        <div className="mb-4 rounded-xl border border-cyan-200 bg-cyan-50 p-4">
-          <h3 className="text-sm font-black text-cyan-950">Approved additions</h3>
+        <div className="mb-4 rounded-lg border border-brand-200 bg-brand-50 p-4">
+          <h3 className="text-sm font-semibold text-brand-950">Approved additions</h3>
           <div className="mt-2 flex flex-wrap gap-2">
             {result.added_phrases.map((phrase) => (
               <span
                 key={phrase}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm text-cyan-900 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm text-brand-900 "
               >
-                <mark className="bg-cyan-100">{phrase}</mark>
+                <mark className="bg-brand-100">{phrase}</mark>
                 <button
-                  className="font-bold text-rose-700 underline"
+                  className="font-medium text-rose-700 underline"
                   onClick={() => onRejectPhrase(phrase)}
                   aria-label={`Reject ${phrase}`}
                 >
@@ -102,17 +102,17 @@ export function ResumeEditor({
       )}
       <div className="grid gap-4 lg:grid-cols-2">
         <label className="block">
-          <span className="mb-2 block text-sm font-bold text-slate-700">Original — read only</span>
+          <span className="mb-2 block text-sm font-medium text-ink-700">Original — read only</span>
           <textarea
-            className="h-[34rem] w-full resize-y rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm leading-6 text-slate-600"
+            className="h-[34rem] w-full resize-y rounded-lg border border-ink-200 bg-ink-50 p-4 font-mono text-sm leading-6 text-ink-600"
             value={result.original}
             readOnly
           />
         </label>
         <label className="block">
-          <span className="mb-2 block text-sm font-bold text-slate-700">Tailored — editable</span>
+          <span className="mb-2 block text-sm font-medium text-ink-700">Tailored — editable</span>
           <textarea
-            className="h-[34rem] w-full resize-y rounded-xl border border-slate-300 bg-white p-4 font-mono text-sm leading-6 text-slate-900 outline-none focus:ring-2 focus:ring-cyan-500"
+            className="h-[34rem] w-full resize-y rounded-lg border border-ink-300 bg-white p-4 font-mono text-sm leading-6 text-ink-900 outline-none focus:ring-2 focus:ring-brand-500"
             value={value}
             onChange={(event) => update(event.target.value)}
           />

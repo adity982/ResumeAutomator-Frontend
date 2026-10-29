@@ -15,6 +15,9 @@ import { SampleWorkspace } from './components/SampleWorkspace'
 import { SettingsPanel } from './components/SettingsPanel'
 import { PilotFeedback } from './components/PilotFeedback'
 import { NextActions } from './components/NextActions'
+import { Brand } from './components/Brand'
+import { PageIntro } from './components/PageIntro'
+import { Welcome } from './components/Welcome'
 import { WorkspaceProvider } from './context/WorkspaceProvider'
 import { useWorkspace } from './hooks/useWorkspace'
 import { useAuth } from './hooks/useAuth'
@@ -123,12 +126,10 @@ function WorkspaceShell({
   const match = /^\/jobs\/(\d+)(?:\/.*)?$/.exec(route)
   return (
     <>
-      <header className="border-b border-slate-800 px-4 py-4 sm:px-6">
-        <div className="mx-auto flex max-w-[90rem] flex-wrap items-center justify-between gap-4">
-          <a href="#/jobs" className="text-xl font-bold tracking-tight text-white">
-            Resume Automator
-          </a>
-          <nav className="flex flex-wrap gap-1" aria-label="Primary">
+      <header className="site-header">
+        <div className="header-inner">
+          <Brand />
+          <nav className="primary-nav" aria-label="Primary">
             {[
               ['/jobs', 'Jobs'],
               ['/evidence', 'My evidence'],
@@ -137,7 +138,6 @@ function WorkspaceShell({
             ].map(([path, label]) => (
               <a
                 key={path}
-                className={`rounded-lg px-4 py-2 text-sm font-bold ${route.startsWith(path) ? 'bg-cyan-300 text-slate-950' : 'text-slate-300 hover:bg-slate-800'}`}
                 href={`#${path}`}
                 aria-current={route.startsWith(path) ? 'page' : undefined}
               >
@@ -145,18 +145,21 @@ function WorkspaceShell({
               </a>
             ))}
           </nav>
-          <span className="text-sm text-slate-400">{user.displayName}</span>
+          <span className="account-label" title={user.displayName}>
+            {user.displayName}
+          </span>
         </div>
       </header>
-      <main id="main-content" className="mx-auto max-w-[90rem] space-y-5 px-4 py-6 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+      <main id="main-content" tabIndex={-1} className="workspace-main">
+        <div className="save-bar">
           <div>
-            <p className="text-sm text-slate-300" role="status">
+            <p className="save-state" role="status">
+              <span className="save-dot" data-dirty={workspace.dirty} aria-hidden="true" />
               {workspace.saveStatus}
             </p>
             {workspace.hasRecovery && (
               <button
-                className="mt-1 text-sm font-bold text-cyan-300 underline"
+                className="mt-1 text-xs text-brand-800 underline"
                 onClick={workspace.restoreProgress}
               >
                 Restore saved workspace
@@ -171,89 +174,129 @@ function WorkspaceShell({
           message={workspace.saveError || sessionError || deletion.error?.message || null}
           tone="error"
         />
-        <Suspense
-          fallback={
-            <Panel title="Opening workspace…">
-              <p role="status">Loading tools…</p>
-            </Panel>
-          }
-        >
-          {route === '/jobs' && (
-            <>
-              <Panel
-                title="Build a stronger application from your actual work"
-                description="Add a job, find supporting project evidence, review your documents, then track the next step."
-              >
-                <a
-                  href="#/jobs/new"
-                  className="inline-block rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white"
-                >
-                  Prepare a new application
-                </a>
-                <a href="#/sample" className="ml-4 text-sm font-bold text-cyan-800 underline">
-                  Explore a sample first
-                </a>
+        <div className="workspace-content">
+          <Suspense
+            fallback={
+              <Panel title="Opening workspace…">
+                <p role="status">Loading tools…</p>
               </Panel>
-              <NextActions />
-              <JobLibrary />
-            </>
-          )}
-          {route === '/jobs/new' && <Workbench />}
-          {match && <JobWorkspace key={match[1]} id={Number(match[1])} />}
-          {route === '/evidence' && (
-            <>
-              <PortfolioPanel />
-              <details className="rounded-xl bg-white p-5">
-                <summary className="cursor-pointer font-bold text-slate-900">
-                  Add other achievements and career stories
-                </summary>
-                <div className="mt-5">
-                  <EvidenceVault />
+            }
+          >
+            {route === '/jobs' && (
+              <>
+                <section className="home-intro">
+                  <div>
+                    <p className="eyebrow">Your workspace</p>
+                    <h1 className="page-title">
+                      Your applications,
+                      <br />
+                      <em>all together.</em>
+                    </h1>
+                  </div>
+                  <div>
+                    <p className="text-sm leading-7 text-ink-600">
+                      Choose a saved job, review your evidence or start a new application.
+                      Everything you need for your next opportunity, in one place.
+                    </p>
+                    <div className="home-actions">
+                      <a href="#/jobs/new" className="ui-button button-primary">
+                        Prepare a new application
+                      </a>
+                      <a href="#/sample" className="text-link">
+                        Explore a sample first
+                      </a>
+                    </div>
+                  </div>
+                </section>
+                <div className="home-grid">
+                  <NextActions />
+                  <JobLibrary />
                 </div>
-              </details>
-            </>
-          )}
-          {route === '/activity' && (
-            <>
-              <ApplicationBoard />
-              <details className="rounded-xl bg-white p-5">
-                <summary className="cursor-pointer font-bold text-slate-900">
-                  Application analytics
-                </summary>
-                <div className="mt-4">
-                  <AnalyticsDashboard />
-                </div>
-              </details>
-              <details className="rounded-xl bg-white p-5">
-                <summary className="cursor-pointer font-bold text-slate-900">
-                  Build search suggestions
-                </summary>
-                <div className="mt-4">
-                  <DiscoveryPanel />
-                </div>
-              </details>
-              <PilotFeedback />
-            </>
-          )}
-          {route === '/settings' && (
-            <SettingsPanel
-              onSignOut={() => void signOut()}
-              onDelete={() => void removeAccount()}
-              busy={deletion.isPending}
-            />
-          )}
-          {route === '/sample' && <SampleWorkspace />}
-          {!match &&
-            !['/jobs', '/jobs/new', '/evidence', '/activity', '/settings', '/sample'].includes(
-              route,
-            ) && (
-              <Panel title="Page not found">
-                <a className="text-cyan-800 underline" href="#/jobs">
-                  Return to jobs
-                </a>
-              </Panel>
+              </>
             )}
-        </Suspense>
+            {route === '/jobs/new' && (
+              <>
+                <PageIntro
+                  eyebrow="A new opportunity"
+                  title="Start with what matters."
+                  description="Bring your resume and a role you’re interested in. We’ll keep everything together from here."
+                />
+                <Workbench />
+              </>
+            )}
+            {match && <JobWorkspace key={match[1]} id={Number(match[1])} />}
+            {route === '/evidence' && (
+              <>
+                <PageIntro
+                  eyebrow="Your body of work"
+                  title="Show what you’ve built."
+                  description="Collect the projects and contributions that make your experience yours. Choose what you want to use."
+                />
+                <PortfolioPanel />
+                <details className="disclosure">
+                  <summary className="cursor-pointer font-medium text-ink-900">
+                    Add other achievements and career stories
+                  </summary>
+                  <div className="mt-5">
+                    <EvidenceVault />
+                  </div>
+                </details>
+              </>
+            )}
+            {route === '/activity' && (
+              <>
+                <PageIntro
+                  eyebrow="Keep things moving"
+                  title="Every next step, in view."
+                  description="Your applications, conversations and follow-ups. A place to pick up the thread."
+                />
+                <ApplicationBoard />
+                <details className="disclosure">
+                  <summary className="cursor-pointer font-medium text-ink-900">
+                    Application analytics
+                  </summary>
+                  <div className="mt-4">
+                    <AnalyticsDashboard />
+                  </div>
+                </details>
+                <details className="disclosure">
+                  <summary className="cursor-pointer font-medium text-ink-900">
+                    Build search suggestions
+                  </summary>
+                  <div className="mt-4">
+                    <DiscoveryPanel />
+                  </div>
+                </details>
+                <PilotFeedback />
+              </>
+            )}
+            {route === '/settings' && (
+              <>
+                <PageIntro
+                  eyebrow="Make yourself at home"
+                  title="Your space. Your say."
+                  description="Manage your account, connections and the information you choose to keep."
+                />
+                <SettingsPanel
+                  onSignOut={() => void signOut()}
+                  onDelete={() => void removeAccount()}
+                  busy={deletion.isPending}
+                />
+              </>
+            )}
+            {route === '/sample' && <SampleWorkspace />}
+            {!match &&
+              !['/jobs', '/jobs/new', '/evidence', '/activity', '/settings', '/sample'].includes(
+                route,
+              ) && (
+                <Panel title="Page not found">
+                  <a className="text-brand-800 underline" href="#/jobs">
+                    Return to jobs
+                  </a>
+                </Panel>
+              )}
+          </Suspense>
+        </div>
       </main>
     </>
   )
@@ -261,7 +304,6 @@ function WorkspaceShell({
 
 export function App(): React.JSX.Element {
   const { user, loading, login, logout, configurationError } = useAuth()
-  const [sample, setSample] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null)
   const signIn = async (): Promise<void> => {
     try {
@@ -272,49 +314,40 @@ export function App(): React.JSX.Element {
   }
   if (loading)
     return (
-      <main className="grid min-h-[100dvh] place-items-center bg-slate-950 text-white">
+      <main className="grid min-h-[100dvh] place-items-center bg-paper text-ink-950">
         <p role="status">Checking your session…</p>
       </main>
     )
   return (
-    <div className="min-h-[100dvh] bg-slate-950 text-slate-100">
+    <div className="app-root">
       <a
-        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:bg-white focus:p-3 focus:text-slate-950"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:bg-white focus:p-3 focus:text-ink-950"
         href="#main-content"
+        onClick={(event) => {
+          event.preventDefault()
+          document.getElementById('main-content')?.focus()
+        }}
       >
         Skip to main content
       </a>
       {user ? (
         <SignedInWorkspace key={user.uid} user={user} logout={logout} />
       ) : (
-        <main id="main-content" className="mx-auto max-w-6xl px-4 py-12 sm:py-20">
-          <p className="text-lg font-bold text-cyan-300">Resume Automator</p>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
-            Your strongest work.
-            <br />
-            The right application.
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-slate-300">
-            Choose relevant projects, support your claims with sources, and prepare an application
-            you can stand behind.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button onClick={() => void signIn()}>Continue with Google</Button>
-            <Button variant="secondary" onClick={() => setSample(!sample)}>
-              {sample ? 'Close sample' : 'Explore sample workspace'}
-            </Button>
-          </div>
-          <StatusMessage message={configurationError || loginError} tone="error" />
-          {sample && (
-            <div className="mt-10">
-              <SampleWorkspace />
-            </div>
-          )}
-        </main>
+        <Welcome
+          onSignIn={() => void signIn()}
+          signInAvailable={!configurationError}
+          error={
+            configurationError
+              ? 'Sign-in is temporarily unavailable. You can still explore the sample workspace.'
+              : loginError
+          }
+        />
       )}
-      <footer className="mx-auto max-w-[90rem] px-6 py-8 text-sm leading-6 text-slate-400">
-        Source-backed suggestions remain drafts until you review them. Saved text stays in your
-        account until you delete it.{' '}
+      <footer className="site-footer">
+        <p>
+          Source-backed suggestions remain drafts until you review them. Saved text stays in your
+          account until you delete it.
+        </p>
         <a
           className="underline"
           href={

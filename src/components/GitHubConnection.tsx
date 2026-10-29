@@ -36,7 +36,7 @@ export function GitHubConnection(): React.JSX.Element {
       title="Connect selected GitHub repositories"
       description="Optional. Public imports work without connecting an account."
     >
-      <p className="text-sm text-slate-700">
+      <p className="text-sm text-ink-700">
         Install the operator’s GitHub App on only the repositories you want to share, with Contents
         read access. Private excerpts are saved in your account and may appear in documents you
         export. Connections expire within eight hours. Review files before importing.
@@ -44,7 +44,7 @@ export function GitHubConnection(): React.JSX.Element {
       <div className="mt-3 flex flex-wrap gap-3">
         {status.data?.installation_url && (
           <a
-            className="font-bold text-cyan-800 underline"
+            className="font-medium text-brand-800 underline"
             href={status.data.installation_url}
             target="_blank"
             rel="noreferrer"
@@ -79,11 +79,11 @@ export function GitHubConnection(): React.JSX.Element {
         )}
       </div>
       {status.data && !status.data.configured && (
-        <p className="mt-3 text-sm text-slate-600">
+        <p className="mt-3 text-sm text-ink-600">
           The operator has not enabled private repository access yet.
         </p>
       )}
-      <p className="mt-3 text-sm text-slate-600">
+      <p className="mt-3 text-sm text-ink-600">
         Disconnect removes the saved credential. Remove imported sources separately to delete
         excerpts. You can also revoke the app in GitHub Settings → Applications.
       </p>
