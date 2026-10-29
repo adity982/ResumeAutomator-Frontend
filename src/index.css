@@ -53,12 +53,6 @@ body {
   color: var(--color-ink-950);
 }
 button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-button,
 a,
 summary,
 input,
@@ -707,6 +701,9 @@ details[open] > summary {
   .primary-nav a {
     font-size: 12px;
     padding: 9px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
   .account-label {
     margin-left: auto;
@@ -734,7 +731,13 @@ details[open] > summary {
     gap: 22px;
   }
   .home-intro .page-title {
-    font-size: 56px;
+    font-size: clamp(40px, 12vw, 48px);
+  }
+  .job-row-actions .ui-button {
+    min-height: 44px;
+  }
+  .save-bar .ui-button {
+    min-height: 40px;
   }
   .panel {
     padding: 23px 20px;
