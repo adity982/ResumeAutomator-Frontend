@@ -362,4 +362,3 @@ export function CareerApp(): React.JSX.Element {
     </div>
   )
 }
-

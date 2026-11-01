@@ -37,6 +37,8 @@ Set `VITE_DEMO_MODE=true` at build time to publish the isolated illustrative dem
 
 `npm run test:demo` builds this configuration and verifies the browser journey, download contents, review reset, mobile overflow and absence of API/auth requests. The normal full-workspace tests remain separate.
 
+See [the demo release guide](docs/DEMO-RELEASE.md) for the exact build flag, existing Vercel project and full-workspace release boundary.
+
 React 19, TypeScript, Vite, TanStack Query, Firebase and Tailwind. Keep the existing backend running and copy `.env.example` to `.env.local` with its actual API base URL.
 
 ```text
