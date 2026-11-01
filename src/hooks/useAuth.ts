@@ -37,7 +37,7 @@ export function useAuth(): {
           displayName: firebaseUser.displayName || firebaseUser.email || 'User',
           isDevelopment: false,
         })
-        setTokenProvider(() => firebaseUser.getIdToken())
+        setTokenProvider((forceRefresh) => firebaseUser.getIdToken(forceRefresh))
       } else {
         setUser(null)
         setTokenProvider(async () => null)

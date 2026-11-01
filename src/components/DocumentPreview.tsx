@@ -93,7 +93,7 @@ export function DocumentPreview({
       title={
         kind === 'resume' ? 'Resume preview and versions' : 'Cover letter preview and versions'
       }
-      description="Preview the actual generated PDF. Approval applies only to this content, template, job and evidence selection."
+      description="Resume PDFs must fit one page at 10 pt or larger. Overflow is reported without cutting text. Simple selectable text supports parsing; no ATS score or compatibility guarantee is implied. DOCX pagination may vary by editor."
     >
       {kind === 'resume' && (
         <ResumeChangeReview original={tailored?.original || ''} draft={content} />

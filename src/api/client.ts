@@ -27,9 +27,9 @@ const API_BASE =
   (import.meta.env.DEV ? 'http://127.0.0.1:8000/api/v1' : '/api/v1')
 const DEFAULT_TIMEOUT = 30_000
 
-type TokenProvider = () => Promise<string | null>
+type TokenProvider = (forceRefresh?: boolean) => Promise<string | null>
 let tokenProvider: TokenProvider = async () =>
-  import.meta.env.DEV
+  import.meta.env.DEV && !import.meta.env.VITE_FIREBASE_API_KEY
     ? (import.meta.env.VITE_DEV_AUTH_TOKEN as string | undefined) ||
       'dev:local-user:local@example.com'
     : null
@@ -78,11 +78,18 @@ async function request<T>(
     if (token) headers.set('Authorization', `Bearer ${token}`)
     if (init.body && !(init.body instanceof FormData))
       headers.set('Content-Type', 'application/json')
-    const response = await fetch(`${API_BASE}${path}`, {
+    let response = await fetch(`${API_BASE}${path}`, {
       ...init,
       headers,
       signal: controller.signal,
     })
+    if (response.status === 401 && token) {
+      const refreshed = await tokenProvider(true)
+      if (refreshed && refreshed !== token) {
+        headers.set('Authorization', `Bearer ${refreshed}`)
+        response = await fetch(`${API_BASE}${path}`, { ...init, headers, signal: controller.signal })
+      }
+    }
     if (!response.ok) {
       let payload: ErrorPayload = {}
       try {
@@ -198,9 +205,20 @@ export const api = {
       body: json({ resume_text: resumeText, targets }),
     })
   },
+  previewLinkedInPdf(file: File): Promise<{ items: Omit<CareerEvidence, 'id' | 'created_at' | 'updated_at'>[]; notice: string }> {
+    const body = new FormData()
+    body.append('file', file)
+    return request('/profiles/linkedin/pdf', { method: 'POST', body })
+  },
+  previewProfile(payload: { platform: string; handle?: string; csv_text?: string }): Promise<{ items: Omit<CareerEvidence, 'id' | 'created_at' | 'updated_at'>[]; notice: string; profile_url?: string }> {
+    return request('/profiles/preview', { method: 'POST', body: json(payload) })
+  },
   tailor(payload: {
     resume_text: string
     jd_text: string
+    focus?: 'balanced' | 'backend' | 'ai_rag' | 'new_grad'
+    bullet_limit?: number
+    career_evidence_ids?: number[]
     confirmed_facts: string[]
     evidence_ids?: number[]
   }): Promise<TailorResult> {
@@ -457,7 +475,7 @@ export const api = {
   }): Promise<{ saved: boolean }> =>
     request('/pilot/feedback', { method: 'POST', body: json(payload) }),
   exportAccount: (): Promise<Record<string, unknown>> => request('/account/export'),
-  capabilities: (): Promise<{ embedding_provider: string; embedding_version: string }> =>
+  capabilities: (): Promise<{ embedding_provider: string; embedding_version: string; repository_imports_enabled?: boolean; release_mode?: string }> =>
     request('/capabilities'),
 }
 

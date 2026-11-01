@@ -224,6 +224,8 @@ function SourceDetail({ source }: { source: PortfolioSource }): React.JSX.Elemen
 }
 
 export function PortfolioPanel(): React.JSX.Element {
+  const capabilities = useQuery({ queryKey: ['capabilities'], queryFn: api.capabilities })
+  const importsAvailable = capabilities.isSuccess && capabilities.data.repository_imports_enabled !== false
   const [url, setUrl] = useState('')
   const [useConnection, setUseConnection] = useState(false)
   const [selected, setSelected] = useState<number | null>(null)
@@ -267,6 +269,7 @@ export function PortfolioPanel(): React.JSX.Element {
   const active = sources.data?.find((source) => source.id === selected)
   return (
     <div className="space-y-5">
+      {capabilities.data?.repository_imports_enabled === false && <p className="status-message status-info" role="status">Limited hosted pilot: GitHub repository imports are unavailable. Use the profile importer and reviewed career facts below for resume tailoring.</p>}
       <GitHubConnection />
       <Panel
         title="Bring your work into the conversation"
@@ -292,7 +295,7 @@ export function PortfolioPanel(): React.JSX.Element {
         </label>
         <Button
           className="mt-3"
-          disabled={!url}
+          disabled={!url || !importsAvailable}
           busy={preview.isPending}
           onClick={() => preview.mutate()}
         >

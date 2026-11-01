@@ -42,6 +42,9 @@ export function Workbench(): React.JSX.Element {
   const setUrl = (value: string): void => updateData({ target_url: value })
   const setJobTitle = (value: string): void => updateData({ target_title: value })
   const setCompany = (value: string): void => updateData({ target_company: value })
+  const [focus, setFocus] = useState<'balanced' | 'backend' | 'ai_rag' | 'new_grad'>('balanced')
+  const [bulletLimit, setBulletLimit] = useState(2)
+  const [careerIds, setCareerIds] = useState<number[]>([])
   const [confirmedFacts, setConfirmedFacts] = useState<string[]>([])
   const coverLetter = data.cover_letter
   const setCoverLetter = (value: string): void => updateData({ cover_letter: value })
@@ -99,6 +102,9 @@ export function Workbench(): React.JSX.Element {
         resume_text: input.resume_text,
         jd_text: input.jd_text,
         confirmed_facts: [],
+        career_evidence_ids: careerIds,
+        bullet_limit: bulletLimit,
+        focus,
         evidence_ids: input.evidence_ids,
       }),
     onSuccess: (result, { input }) => setTailored(result, workspaceInputKey(input)),
@@ -137,6 +143,22 @@ export function Workbench(): React.JSX.Element {
 
   return (
     <div className="space-y-6">
+      <Panel title="Facts to include" description="Choose reviewed profile facts for this draft. Include certifications and coding achievements only when relevant to the role.">
+        <label className="mb-4 block text-sm font-medium">Career focus
+          <select className="ml-3 min-h-11 rounded-lg border border-ink-300 px-3" value={focus} onChange={e => setFocus(e.target.value as typeof focus)}>
+            <option value="balanced">Backend, AI/RAG and new-grad SWE</option><option value="backend">Backend engineering</option><option value="ai_rag">AI and retrieval systems</option><option value="new_grad">General new-grad SWE</option>
+          </select>
+        </label>
+        <label className="mb-4 block text-sm font-medium">Bullets per role or project
+          <select className="ml-3 min-h-11 rounded-lg border border-ink-300 px-3" value={bulletLimit} onChange={e => setBulletLimit(Number(e.target.value))}>
+            <option value={1}>1 — concise</option><option value={2}>2 — balanced</option><option value={3}>3 — detailed</option><option value={4}>4 — extended review</option>
+          </select>
+        </label>
+        {(evidence.data || []).filter(item => item.verified).map(item => <label key={item.id} className="my-2 flex items-start gap-2 text-sm">
+          <input type="checkbox" checked={careerIds.includes(item.id)} onChange={e => setCareerIds(ids => e.target.checked ? [...ids, item.id] : ids.filter(id => id !== item.id))} />{item.title}: {item.statement}
+        </label>)}
+        {!(evidence.data || []).some(item => item.verified) && <p className="text-sm text-ink-600">Import profiles and review their facts in <a href="#/evidence" className="underline">My evidence</a> first.</p>}
+      </Panel>
       <ResumeReuse />
       <div className="grid gap-5 xl:grid-cols-2">
         <Panel

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { ProfileEvidence } from './ProfileEvidence'
 import { api } from '../api/client'
 import type { CareerEvidence } from '../types'
 import { Button } from './Button'
@@ -68,6 +69,7 @@ export function EvidenceVault(): React.JSX.Element {
 
   return (
     <div className="space-y-5">
+      <ProfileEvidence />
       <Panel
         title="Career evidence vault"
         description="Store reusable facts once, mark only substantiated evidence as verified, and reuse its tags during tailoring."
