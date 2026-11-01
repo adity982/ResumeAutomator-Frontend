@@ -4,6 +4,7 @@ test('job to cited project draft to approved document and saved recovery', async
   page,
 }, testInfo) => {
   await page.goto('/#/jobs/new')
+  await expect(page.getByLabel('Parsed resume — editable')).toBeVisible()
   await page.keyboard.press('Tab')
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/#\/jobs\/new$/)
@@ -133,6 +134,7 @@ test('signed-out welcome keeps the sample accessible on desktop and mobile', asy
   page,
 }, testInfo) => {
   await page.goto('http://127.0.0.1:5175')
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   await page.keyboard.press('Tab')
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL('http://127.0.0.1:5175/')
