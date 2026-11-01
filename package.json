@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "npm run build && playwright test",
+    "test:demo": "npm run build -- --mode demo --outDir dist-demo && playwright test --config playwright.demo.config.ts",
     "typecheck": "tsc -b --pretty false",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
     "preview": "vite preview"

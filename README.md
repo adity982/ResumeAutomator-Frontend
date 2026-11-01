@@ -31,6 +31,12 @@ Preview generates the actual PDF used for export. Approval is invalidated when d
 
 ## Development
 
+### Free public demo
+
+Set `VITE_DEMO_MODE=true` at build time to publish the isolated illustrative demo. It does not load the account workspace or initialize Firebase, and does not call the backend. Role selection, source inspection, explicit review and a sample text download work locally. Its fictional examples do not run embeddings, vector search or AI generation. Existing signed-in accounts are not available in this mode. Build normally with the flag unset/false to use the full workspace against a compatible API.
+
+`npm run test:demo` builds this configuration and verifies the browser journey, download contents, review reset, mobile overflow and absence of API/auth requests. The normal full-workspace tests remain separate.
+
 React 19, TypeScript, Vite, TanStack Query, Firebase and Tailwind. Keep the existing backend running and copy `.env.example` to `.env.local` with its actual API base URL.
 
 ```text

@@ -11,6 +11,7 @@ node_modules
 playwright-report/
 test-results/
 dist
+dist-demo
 dist-ssr
 *.local
 *.tsbuildinfo

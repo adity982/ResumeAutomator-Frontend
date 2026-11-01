@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Brand } from './Brand'
 import { Button } from './Button'
 import { SampleWorkspace } from './SampleWorkspace'
@@ -8,12 +8,21 @@ export function Welcome({
   onSignIn,
   error,
   signInAvailable = true,
+  demoMode = false,
 }: {
   onSignIn: () => void
   error: string | null
   signInAvailable?: boolean
+  demoMode?: boolean
 }): React.JSX.Element {
-  const [sample, setSample] = useState(false)
+  const [sample, setSample] = useState(demoMode && window.location.hash === '#/sample')
+  useEffect(() => {
+    if (sample) {
+      const sampleSection = document.getElementById('welcome-sample')
+      sampleSection?.scrollIntoView({ block: 'start' })
+      sampleSection?.focus({ preventScroll: true })
+    }
+  }, [sample])
   return (
     <>
       <header className="site-header">
@@ -29,14 +38,20 @@ export function Welcome({
           >
             How it works
           </a>
-          <Button variant="secondary" onClick={onSignIn} disabled={!signInAvailable}>
-            Sign in
-          </Button>
+          {demoMode ? (
+            <a className="text-link" href="https://github.com/adity982/ResumeAutomator-Frontend/tree/feat/evidence-career-workspace">
+              View source ↗
+            </a>
+          ) : (
+            <Button variant="secondary" onClick={onSignIn} disabled={!signInAvailable}>
+              Sign in
+            </Button>
+          )}
         </div>
       </header>
       <main id="main-content" tabIndex={-1} className="landing-main">
         <section className="landing-hero">
-          <p className="eyebrow">Your experience. In your own words.</p>
+          <p className="eyebrow">{demoMode ? 'Interactive demo · no account needed' : 'Your experience. In your own words.'}</p>
           <h1>
             <span>Your work,</span>
             <br />
@@ -45,17 +60,25 @@ export function Welcome({
           <p className="hero-copy">
             Turn the projects you’ve built into applications you can stand behind.
           </p>
+          {demoMode && (
+            <p className="mt-5 text-sm leading-7 text-ink-600">
+              Try a fictional role, inspect its evidence and review a sample bullet.
+              Saved accounts, GitHub imports and live AI retrieval are not enabled in this demo.
+            </p>
+          )}
           <div className="home-actions">
-            <Button onClick={onSignIn} disabled={!signInAvailable}>
-              Continue with Google <span aria-hidden="true">↗</span>
-            </Button>
+            {!demoMode && (
+              <Button onClick={onSignIn} disabled={!signInAvailable}>
+                Continue with Google <span aria-hidden="true">↗</span>
+              </Button>
+            )}
             <button
-              className="text-link"
-              onClick={() => setSample(!sample)}
+              className={demoMode ? 'ui-button button-primary' : 'text-link'}
+              onClick={() => setSample((open) => !open)}
               aria-expanded={sample}
               aria-controls="welcome-sample"
             >
-              {sample ? 'Close sample' : 'Explore sample workspace'}
+              {sample ? 'Close sample' : demoMode ? 'Explore the demo' : 'Explore sample workspace'}
             </button>
           </div>
           <p className="mt-5 text-xs text-ink-500">Your experience. Your words. Your final say.</p>
@@ -82,12 +105,11 @@ export function Welcome({
             More moving forward.
           </h2>
           <p>
-            Keep the job, the work that supports it and the resume you actually sent in one place.
-            Reuse what fits. Review what changed. Pick up where you left off.
+            {demoMode ? 'The full workspace is designed to keep a job, its supporting work and reviewed resume together. This demo shows the evidence-review step with fictional examples; it does not save an application.' : 'Keep the job, the work that supports it and the resume you actually sent in one place. Reuse what fits. Review what changed. Pick up where you left off.'}
           </p>
         </section>
         {sample && (
-          <div id="welcome-sample">
+          <div id="welcome-sample" tabIndex={-1}>
             <SampleWorkspace />
           </div>
         )}
