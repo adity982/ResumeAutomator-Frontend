@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { App } from './App'
-import { WorkspaceProvider } from './context/WorkspaceProvider'
 import './index.css'
 
 const queryClient = new QueryClient({
@@ -19,9 +18,7 @@ if (!root) throw new Error('Application root element was not found.')
 createRoot(root).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <WorkspaceProvider>
-        <App />
-      </WorkspaceProvider>
+      <App />
     </QueryClientProvider>
   </StrictMode>,
 )

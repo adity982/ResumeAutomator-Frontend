@@ -11,3 +11,19 @@ describe('API client', () => {
     fetchMock.mockRestore()
   })
 })
+
+
+it('refreshes a rejected identity once and retries with the fresh token', async () => {
+  const tokens = vi.fn(async (force?: boolean) => force ? 'fresh-token' : 'expired-token')
+  setTokenProvider(tokens)
+  const fetchMock = vi.spyOn(globalThis, 'fetch')
+    .mockResolvedValueOnce(new Response('{}', { status: 401, headers: { 'Content-Type': 'application/json' } }))
+    .mockResolvedValueOnce(new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } }))
+  try {
+    const { api } = await import('./client')
+    expect(await api.listJobs()).toEqual([])
+    expect(tokens).toHaveBeenLastCalledWith(true)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect((fetchMock.mock.calls[1][1]?.headers as Headers).get('Authorization')).toBe('Bearer fresh-token')
+  } finally { fetchMock.mockRestore() }
+})
