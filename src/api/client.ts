@@ -400,6 +400,10 @@ export const api = {
       { method: 'POST', body: json({ url, use_connected_github: useConnection }) },
       90_000,
     ),
+  linkedinConnection: (): Promise<{ configured: boolean; connected: boolean; name: string | null; notice: string }> => request('/connections/linkedin'),
+  startLinkedIn: (): Promise<{ authorization_url: string; state: string }> => request('/connections/linkedin/start', { method: 'POST' }),
+  completeLinkedIn: (code: string, state: string): Promise<{ connected: boolean; name: string }> => request('/connections/linkedin/complete', { method: 'POST', body: json({ code, state }) }),
+  disconnectLinkedIn: (): Promise<void> => request('/connections/linkedin', { method: 'DELETE' }),
   githubConnection: (): Promise<{
     configured: boolean
     installation_url: string | null

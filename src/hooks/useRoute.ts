@@ -12,7 +12,7 @@ export function useRoute(): string {
       (new URLSearchParams(window.location.search).has('code') ||
         new URLSearchParams(window.location.search).has('error'))
         ? '/evidence'
-        : window.location.hash.slice(1) || '/jobs',
+        : window.location.hash.slice(1).split('?')[0] || '/jobs',
     () => '/jobs',
   )
 }

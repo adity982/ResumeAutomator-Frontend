@@ -5,6 +5,7 @@ import type { PortfolioSource, ProjectEvidence } from '../types'
 import { Button } from './Button'
 import { Panel } from './Panel'
 import { StatusMessage } from './StatusMessage'
+import { LinkedInConnection } from './LinkedInConnection'
 import { GitHubConnection } from './GitHubConnection'
 
 function EvidenceReview({
@@ -270,6 +271,7 @@ export function PortfolioPanel(): React.JSX.Element {
   return (
     <div className="space-y-5">
       {capabilities.data?.repository_imports_enabled === false && <p className="status-message status-info" role="status">Limited hosted pilot: GitHub repository imports are unavailable. Use the profile importer and reviewed career facts below for resume tailoring.</p>}
+      <LinkedInConnection />
       <GitHubConnection />
       <Panel
         title="Bring your work into the conversation"
